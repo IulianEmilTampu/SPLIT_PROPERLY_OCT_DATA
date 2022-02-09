@@ -2,7 +2,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Code used to train a shallow CNN model (LightOCT) for classification on two publicly available optical coherence tomography (OCT) dataset using a per-image or per-volume/subject dataset splitting strategy.
+Code used to train a shallow CNN model (LightOCT)[Butola et al.] for classification on two publicly available optical coherence tomography (OCT) dataset using a per-image or per-volume/subject dataset splitting strategy.
 
 ### Prerequisites
 A computer with GPU and relative drivers installed.
