@@ -12,6 +12,7 @@ import nibabel as nib
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import KFold
 
 import tensorflow as tf
 from tensorflow.keras import layers
