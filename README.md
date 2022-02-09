@@ -9,19 +9,13 @@ A computer with GPU and relative drivers installed.
 Anaconda or Miniconda python environment manager.
 
 ### Installation
-
-1. Create a python environment with python 3.7
+1. Clone the repo to your local machine
+```sh
+git clone git@github.com:IulianEmilTampu/OCT_SPLIT_PROPERLY_YOUR_DATA.git
+```
+2. Move to the downloaded repository and create a python environment using the given .yml file
   ```sh
-   conda create -n dataset_split python=3.7
-   ```
-2. Activate the python virtual environment and install the required packages
-  ```sh
-   conda activate dataset_split
-   pip install tensorflow==2.6.2 tensorflow_addons numpy matplotlib nibabel sklearn opencv-python
-   ```
-4. Clone the repo to your local machine
-   ```sh
-   git clone git@github.com:IulianEmilTampu/OCT_SPLIT_PROPERLY_YOUR_DATA.git
+   conda env create -f environment_setup.yml
    ```
 
 <!-- Dataset Preparation -->
