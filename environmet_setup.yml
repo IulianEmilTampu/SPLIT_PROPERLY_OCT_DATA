@@ -1,4 +1,4 @@
-name: test_pub
+name: dataset_splitting
 channels:
   - conda-forge
   - defaults
