@@ -31,6 +31,76 @@ from shutil import copyfile, move
 from collections import OrderedDict
 from sklearn.model_selection import KFold
 
+## parse inline parameters
+
+parser = argparse.ArgumentParser(description='Script that configures a cross-validation training for OCT 2D image classification.')
+parser.add_argument('-wd','--working_directory' ,required=False, help='Provide the Working Directory where the models_tf.py, utilities.py and utilities_models_tf.py files are. This folder will also be the one where the trained models will be saved. If not provided, the current working directory is used', default=os.getcwd())
+# dataset parameters
+parser.add_argument('-df', '--dataset_folder', required=True, help='Provide the Dataset Folder where the downloaded dataset are located. Note that for the OCT2017 dataset in case of per_image or per_volume split strategy, the images should be first reorganized using the refine_dataset.py script. Give the original dataset path in case the original_split strategy is set.')
+parser.add_argument('-dt', '--dataset_type', required=True, help='Specifies which dataset (retinal or AIIMS) is given for training. This will be used to set the appropriate dataloader function')
+parser.add_argument('-dss', '--dataset_split_strategy', required=False, help='Specifies the strategy used to split the detaset into training testing and validation. Three options available per_volume, per_image (innapropriate splitting) or original (only OCT2017)', default='per_volume')
+parser.add_argument('-ids', '--imbalance_data_strategy', required=False, help='Strategy to use to tackle imbalance data. Available none or weights', default='weights')
+# model parameters adn training parameters
+parser.add_argument('-mc', '--model_configuration', required=False, help='Provide the Model Configuration (LightOCT or others if implemented in the models_tf.py file).', default='LightOCT')
+parser.add_argument('-mn', '--model_name', required=False, help='Provide the Model Name. This will be used to create the folder where to save the model. If not provided, the current datetime will be used', default=datetime.now().strftime("%H:%M:%S"))
+parser.add_argument('-f', '--folds', required=False, help='Number of folds. Default is 3', default='3')
+parser.add_argument('-l', '--loss', required=False, help='Loss to use to train the model (cce or wcce). Default is cce', default='cce')
+parser.add_argument('-lr', '--learning_rate', required=False, help='Learning rate.', default=0.001)
+parser.add_argument('-bs', '--batch_size', required=False, help='Batch size.', default=50)
+parser.add_argument('-ks', '--kernel_size', nargs='+', required=False, help='Encoder conv kernel size.', default=(5,5))
+parser.add_argument('-augment', '--augmentation', required=False, help='Specify if data augmentation is to be performed (True) or not (False)', default=True)
+# debug parametres
+parser.add_argument('-v', '--verbose',required=False, help='How much to information to print while training: 0 = none, 1 = at the end of an epoch, 2 = detailed progression withing the epoch.', default=0.1)
+parser.add_argument('-ctd', '--check_training', required=False, help='If True, checks that none of the test images is in the training/validation set. This may take a while depending on the size of the dataset.', default=True)
+parser.add_argument('-db', '--debug', required=False, help='True if want to use a smaller portion of the dataset for debugging', default=False)
+
+args = parser.parse_args()
+
+# # # # # # # # # # # # # # # parse variables
+working_folder = args.working_directory
+# dataset variables
+dataset_folder = args.dataset_folder
+dataset_type = args.dataset_type
+dataset_split_strategy = args.dataset_split_strategy
+imbalance_data_strategy = args.imbalance_data_strategy
+# model parameters
+model_configuration = args.model_configuration
+model_save_name = args.model_name
+loss = args.loss
+learning_rate = float(args.learning_rate)
+batch_size = int(args.batch_size)
+data_augmentation = args.augmentation
+N_FOLDS = int(args.folds)
+kernel_size = [int(i) for i in args.kernel_size]
+# debug variables
+verbose = int(args.verbose)
+debug = args.debug == 'True'
+check_training = args.check_training == 'True'
+
+
+# # # # # # # # # # #  parse variables
+# working_folder = ""
+# # dataset variables
+# # dataset_folder = "/flush/iulta54/Research/Data/OCT/Retinal/Zhang_dataset_version_3/OCT"
+# dataset_folder = "/flush/iulta54/Research/Data/OCT/Retinal/Zhang_dataset/per_class_files"
+# # dataset_folder = "/flush/iulta54/Research/Data/OCT/AIIMS_Dataset/original"
+# dataset_type = 'retinal'
+# dataset_split_strategy = 'per_image'
+# imbalance_data_strategy = 'none'
+# # model parameters
+# model_configuration = 'LightOCT'
+# model_save_name = 'TEST'
+# loss = 'cce'
+# learning_rate = 0.001
+# batch_size = 256
+# data_augmentation = True
+# N_FOLDS = 5
+# kernel_size = (3,3)
+# # debug variables
+# verbose = 2
+# debug = False
+# check_training = False
+
 ## define utilities
 def get_retinal_organized_files(dataset_folder):
     '''
@@ -333,78 +403,7 @@ def get_per_volume_train_test_val_split(organized_files,
 
     return per_fold_train_files, per_fold_val_files, test_filenames, summary_ids
 
-
-## parse inline parameters
-
-parser = argparse.ArgumentParser(description='Script that runs a cross-validation training for OCT 2D image classification.')
-parser.add_argument('-wd','--working_directory' ,required=False, help='Provide the Working Directory where the models_tf.py, utilities.py and utilities_models_tf.py files are. This folder will also be the one where the trained models will be saved. If not provided, the current working directory is used', default=os.getcwd())
-# dataset parameters
-parser.add_argument('-df', '--dataset_folder', required=True, help='Provide the Dataset Folder where the downloaded dataset are located. Note that for the OCT2017 dataset in case of per_image or per_volume split strategy, the images should be first reorganized using the refine_dataset.py script. Give the original dataset path in case the original_split strategy is set.')
-parser.add_argument('-dt', '--dataset_type', required=True, help='Specifies which dataset (retinal or AIIMS) is given for training. This will be used to set the appropriate dataloader function')
-parser.add_argument('-dss', '--dataset_split_strategy', required=False, help='Specifies the strategy used to split the detaset into training testing and validation. Three options available per_volume, per_image (innapropriate splitting) or original (only OCT2017)', default='per_volume')
-parser.add_argument('-ids', '--imbalance_data_strategy', required=False, help='Strategy to use to tackle imbalance data. Available none or weights', default='weights')
-# model parameters adn training parameters
-parser.add_argument('-mc', '--model_configuration', required=False, help='Provide the Model Configuration (LightOCT or others if implemented in the models_tf.py file).', default='LightOCT')
-parser.add_argument('-mn', '--model_name', required=False, help='Provide the Model Name. This will be used to create the folder where to save the model. If not provided, the current datetime will be used', default=datetime.now().strftime("%H:%M:%S"))
-parser.add_argument('-f', '--folds', required=False, help='Number of folds. Default is 3', default='3')
-parser.add_argument('-l', '--loss', required=False, help='Loss to use to train the model (cce or wcce). Default is cce', default='cce')
-parser.add_argument('-lr', '--learning_rate', required=False, help='Learning rate.', default=0.001)
-parser.add_argument('-bs', '--batch_size', required=False, help='Batch size.', default=50)
-parser.add_argument('-ks', '--kernel_size', nargs='+', required=False, help='Encoder conv kernel size.', default=(5,5))
-parser.add_argument('-augment', '--augmentation', required=False, help='Specify if data augmentation is to be performed (True) or not (False)', default=True)
-# debug parametres
-parser.add_argument('-v', '--verbose',required=False, help='How much to information to print while training: 0 = none, 1 = at the end of an epoch, 2 = detailed progression withing the epoch.', default=0.1)
-parser.add_argument('-ctd', '--check_training', required=False, help='If True, checks that none of the test images is in the training/validation set. This may take a while depending on the size of the dataset.', default=True)
-parser.add_argument('-db', '--debug', required=False, help='True if want to use a smaller portion of the dataset for debugging', default=False)
-
-args = parser.parse_args()
-
-# # # # # # # # # # # # # # # parse variables
-working_folder = args.working_directory
-# dataset variables
-dataset_folder = args.dataset_folder
-dataset_type = args.dataset_type
-dataset_split_strategy = args.dataset_split_strategy
-imbalance_data_strategy = args.imbalance_data_strategy
-# model parameters
-model_configuration = args.model_configuration
-model_save_name = args.model_name
-loss = args.loss
-learning_rate = float(args.learning_rate)
-batch_size = int(args.batch_size)
-data_augmentation = args.augmentation
-N_FOLDS = int(args.folds)
-kernel_size = [int(i) for i in args.kernel_size]
-# debug variables
-verbose = int(args.verbose)
-debug = args.debug == 'True'
-check_training = args.check_training == 'True'
-
-
-# # # # # # # # # # #  parse variables
-# working_folder = "/flush/iulta54/Research/P3_1-OCT_DATASET_STUDY"
-# # dataset variables
-# # dataset_folder = "/flush/iulta54/Research/Data/OCT/Retinal/Zhang_dataset_version_3/OCT"
-# dataset_folder = "/flush/iulta54/Research/Data/OCT/Retinal/Zhang_dataset/per_class_files"
-# # dataset_folder = "/flush/iulta54/Research/Data/OCT/AIIMS_Dataset/original"
-# dataset_type = 'retinal'
-# dataset_split_strategy = 'per_image'
-# imbalance_data_strategy = 'none'
-# # model parameters
-# model_configuration = 'LightOCT'
-# model_save_name = 'TEST'
-# loss = 'cce'
-# learning_rate = 0.001
-# batch_size = 256
-# data_augmentation = True
-# N_FOLDS = 5
-# kernel_size = (3,3)
-# # debug variables
-# verbose = 2
-# debug = False
-# check_training = False
-
-
+  
 # check if working folder and dataset folder exist
 if os.path.isdir(working_folder):
     # check if the trained_model folder exists, if not create it
@@ -450,7 +449,7 @@ importlib.reload(utilities)
 if dataset_type == 'retinal':
     if any([dataset_split_strategy=='per_volume', dataset_split_strategy=='per_image']):
         # heuristic for the retinal dataset only if not using the original split
-        organized_files = get_retinal_organized_files(dataset_folder)
+        organized_files = utilities.get_retinal_organized_files(dataset_folder)
 
         unique_labels = list(organized_files.keys())
         nClasses =len(unique_labels)
@@ -473,7 +472,7 @@ val_min_vol_per_class = 2
 random.seed(29122009)
 
 if dataset_split_strategy == 'per_volume':
-    per_fold_train_files, per_fold_val_files, test_file, summary_ids = get_per_volume_train_test_val_split(organized_files,
+    per_fold_train_files, per_fold_val_files, test_file, summary_ids = utilities.get_per_volume_train_test_val_split(organized_files,
                                         n_folds=N_FOLDS,
                                         n_per_class_test_imgs=n_per_class_test_imgs,
                                         test_min_vol_per_class=test_min_vol_per_class,
@@ -493,7 +492,7 @@ if dataset_split_strategy == 'per_volume':
             print(f'Class {cls:{max([len(c) for c in organized_files.keys()])}s}: {summary_ids["test"][cls]}')
 
 elif dataset_split_strategy == 'per_image':
-    per_fold_train_files, per_fold_val_files, test_file = get_per_image_train_test_val_split(organized_files,
+    per_fold_train_files, per_fold_val_files, test_file = utilities.get_per_image_train_test_val_split(organized_files,
                                         n_folds=N_FOLDS,
                                         n_per_class_test_imgs=n_per_class_test_imgs,
                                         n_per_class_val_imgs=n_per_class_val_imgs)
