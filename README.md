@@ -1,32 +1,4 @@
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
-
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
@@ -47,63 +19,36 @@ Anaconda or Miniconda python environment manager.
    conda activate dataset_split
    pip install tensorflow==2.6.2 tensorflow_addons numpy matplotlib nibabel sklearn opencv-python
    ```
-4. Clone the repo
+4. Clone the repo to your local machine
    ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+   git clone git@github.com:IulianEmilTampu/OCT_SPLIT_PROPERLY_YOUR_DATA.git
    ```
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+<!-- Dataset Preparation -->
+## Dataset preparation
+### AIIMS dataset
+The AIIMS dataset is available at https://www.bioailab.org/datasets 
+This dataset is ready to use since the images are saved per class (Healthy or Cancer) and per subject.
 
-
+### Retinal dataset
+The retinal dataset is available at https://data.mendeley.com/datasets/rscbjbr9sj/2.
+The dataset comes with the train and test splits already organised. This version of the dataset is called *original dataset*. To obtain a version of the dataset split per class, use the refine_dataset.py script, where the location of the original dataset can be specified using the variable dataset_folder and the location of where to save the reorganized dataset by destination_folder. These two variables are specified within the refine_dataset.py 
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+The repository comes with two shell scripts that run automatically model configuration, training and testing for the retinal and the AIIMS datasets. By default, the training, validation and testing datasets are created using a per-volume/subject splitting strategy. To change the splitting strategy, open the train_LightOCT_retinal.sh or the train_LightOCT_AIIMS.sh file and change the dataset_split_strategy variable (line 60) to per-image or original (original only valid for the retinal dataset).
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+To run the default training on the retinal dataset, activate the python environment created using the instructions above and, in the folder where the repository is copied, run
+  ```sh
+  ./train_LightOCT_retinal.sh -w path/to/where/the/repository/is/located -d /path/to/the/per_class/retinal/dataset -g 0
+  ```
+This will:
+1. Evoke the configure_training.py script that takes, among others, the path/to/where/the/repository/is/located and the /path/to/the/per_class/retinal/dataset to split the dataset using the specified strategy, set up model parameters beasd on the dataset configuration and save the information in a config.json file. The config.json file is saved in an automatically created folder (trained_models).
+2. Run the run_training.py script that, using the config.json file, trains the LightOCT model.
+3. Test both the best and the last models trained using early stopping (best model = model with highest accuracy, last model = the actual last model before early stopping stopped the training).
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#top">back to top</a>)</p>
+Models and training performances are saved independently for every fold in a folder dedicated for the model just trained. Test results are also saved in the dedicated folder as ROC and PP curves as well as the raw model predictions for the test dataset.
 
 
 
@@ -112,35 +57,19 @@ Don't forget to give the project a star! Thanks again!
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
-
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
+Iulian Emil Tampu - [@twitter_handle](https://twitter.com/) - iulian.emil.tampu@liu.se
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->>
+<!-- [contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
 [contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
 [forks-url]: https://github.com/github_username/repo_name/network/members
@@ -152,4 +81,13 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
+[product-screenshot]: images/screenshot.png -->
+
+<!-- ROADMAP 
+## Roadmap
+
+- [ ] Feature 1
+- [ ] Feature 2
+- [ ] Feature 3
+    - [ ] Nested Feature
+
