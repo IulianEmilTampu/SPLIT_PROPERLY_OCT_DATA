@@ -25,7 +25,7 @@ The AIIMS dataset is available at https://www.bioailab.org/datasets
 This dataset is ready to use since the images are saved per class (Healthy or Cancer) and per subject.
 
 ### Retinal dataset
-The retinal dataset is available at https://data.mendeley.com/datasets/rscbjbr9sj/2.
+The retinal dataset is available at https://data.mendeley.com/datasets/rscbjbr9sj/
 The dataset comes with the train and test splits already organised. This version of the dataset is called *original dataset*. To obtain a version of the dataset split per class, use the refine_dataset.py script, where the location of the original dataset can be specified using the variable dataset_folder and the location of where to save the reorganized dataset by destination_folder. These two variables are specified within the refine_dataset.py 
 
 <!-- USAGE EXAMPLES -->
