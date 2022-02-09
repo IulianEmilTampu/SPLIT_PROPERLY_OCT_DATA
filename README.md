@@ -2,7 +2,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Code used to train a shallow CNN model (LightOCT) [1] for classification on two publicly available optical coherence tomography (OCT) dataset using a per-image or per-volume/subject dataset splitting strategy.
+Code used to train a shallow CNN model (LightOCT) [1] for classification on two publicly available optical coherence tomography (OCT) dataset using a *per-image* or *per-volume/subject* dataset splitting strategy. The results that can be obtained with this code are representative of of how impropper dataset splitting can inflate model accuracy performance.
 
 ### Prerequisites
 A computer with GPU and relative drivers installed.
@@ -17,7 +17,6 @@ git clone git@github.com:IulianEmilTampu/OCT_SPLIT_PROPERLY_YOUR_DATA.git
   ```sh
    conda env create -f environment_setup.yml
    ```
-
 <!-- Dataset Preparation -->
 ## Dataset preparation
 ### AIIMS dataset
