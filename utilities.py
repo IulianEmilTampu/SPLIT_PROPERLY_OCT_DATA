@@ -468,6 +468,18 @@ def AIIMS_data_gen(img_files,
 
     # get string labels from the file names (assuming .../LABEL/Subject/LABEL_0001.extension)
     str_labels = [pathlib.Path(f).parts[-3] for f in img_files]
+
+    def str_to_integer_label(str_labels, unique_labels=None):
+        '''
+        Converts a list of string based labels to integers
+        '''
+        if unique_labels is None:
+            unique_labels = list(set(str_labels))
+            unique_labels.sort()
+
+        int_labels = [unique_labels.index(l) for l in str_labels]
+        return int_labels
+
     # convert to integer labels
     int_labels = str_to_integer_label(str_labels)
     if categorical:

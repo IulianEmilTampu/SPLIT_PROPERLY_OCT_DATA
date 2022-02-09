@@ -28,12 +28,6 @@ case "${option}" in
 esac
 done
 
-
-# make sure to have the right conda environment open when running the script
-# activate conda environment
-eval "$(conda shell.bash hook)"
-conda activate P5
-
 # work on GPU 0
 export CUDA_VISIBLE_DEVICES=$gpu
 
@@ -63,16 +57,16 @@ declare -a loss=cce
 
 # declare dataset specification
 declare -a dataset_type=retinal
-declare -a dataset_split_strategy=per_image
+declare -a dataset_split_strategy=per_volume
 declare -a ids=none
-declare -a n_folds=5
+declare -a n_folds=3
 
 
 
 save_model_name="$model_configuration"_"$dataset_split_strategy"_split_"$n_folds"_folds_lr"$lr"_batch"$batchSize"_"$dataset_type"
 python3 -u configure_training.py -wd $working_folder -df $dataset_folder -dt $dataset_type -dss $dataset_split_strategy -mc $model_configuration -mn $save_model_name -b $batchSize -f $n_folds -l $loss -lr $lr -ids $ids -v 2 -db False |& tee $log_folder/$save_model_name.log
 
-python3 -u run_training.py -cf $working_folder/trained_models/$save_model_name/config.json -e 250 -p 250 -db False |& tee -a $log_folder/$save_model_name.log
+python3 -u run_training.py -cf $working_folder/trained_models/$save_model_name/config.json -e 250 -p 250 -db True |& tee -a $log_folder/$save_model_name.log
 
 # test models (best and last)
 python3 -u test_model.py -m $working_folder/trained_models/$save_model_name -d $dataset_folder -mv best |& tee -a $log_folder/$save_model_name.log
