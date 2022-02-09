@@ -33,26 +33,25 @@ import tensorflow.keras.layers as layers
 
 ## parse the configuration file
 
-# parser = argparse.ArgumentParser(description='Script that runs a cross-validation training for OCT 2D Retinal disease classification. It uses the configuration file created using the configure_training.py file. Run the configuration first!')
-#
-# parser.add_argument('-cf','--configuration_file' ,required=True, help='Provide the path to the configuration file generated using the configure_training.py script.')
-# parser.add_argument('-db','--debug' ,required=False, help='Set to True if one wants to run the training in debug mode (only 15 epochs with 10 early stop patience).', default=False)
-# parser.add_argument('-e','--epocs' ,required=False, help='Set the maximum number of epochs used to train the model Default 200.', default=200)
-# parser.add_argument('-p','--patience' ,required=False, help='Set the patiencs for early stopping. Default 25', default=25)
-# args = parser.parse_args()
-#
-# configuration_file = args.configuration_file
-# debug = args.debug == "True"
-# max_epochs = int(args.epocs)
-# patience = int(args.patience)
+parser = argparse.ArgumentParser(description='Script that runs a cross-validation training for OCT 2D Retinal disease classification. It uses the configuration file created using the configure_training.py file. Run the configuration first!')
+
+parser.add_argument('-cf','--configuration_file' ,required=True, help='Provide the path to the configuration file generated using the configure_training.py script.')
+parser.add_argument('-db','--debug' ,required=False, help='Set to True if one wants to run the training in debug mode (only 15 epochs with 10 early stop patience).', default=False)
+parser.add_argument('-e','--epocs' ,required=False, help='Set the maximum number of epochs used to train the model Default 200.', default=200)
+parser.add_argument('-p','--patience' ,required=False, help='Set the patiencs for early stopping. Default 25', default=25)
+args = parser.parse_args()
+
+configuration_file = args.configuration_file
+debug = args.debug == "True"
+max_epochs = int(args.epocs)
+patience = int(args.patience)
 
 
-# # # # # # # DEBUG
-
-configuration_file = '/flush/iulta54/Research/P3_1-OCT_DATASET_STUDY/trained_models/TEST/config.json'
-debug = True
-max_epochs = 2
-patience = 5
+# # # # # # # # DEBUG
+# configuration_file = '/flush/iulta54/Research/P3_1-OCT_DATASET_STUDY/trained_models/TEST/config.json'
+# debug = True
+# max_epochs = 2
+# patience = 5
 
 if not os.path.isfile(configuration_file):
     raise ValueError(f'Configuration file not found. Run the configure_training.py script first. Given {configuration_file}')

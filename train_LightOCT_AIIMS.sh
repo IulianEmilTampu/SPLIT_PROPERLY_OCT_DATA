@@ -44,7 +44,7 @@ log_folder=$working_folder/trained_models_log
 
 
  ############################################################################
- ################################ TESTING  ################################
+ ################################# TRAINING  ################################
  ############################################################################
 
 model_configuration=LightOCT
@@ -64,7 +64,7 @@ declare -a n_folds=3
 
 
 save_model_name="$model_configuration"_"$dataset_split_strategy"_split_"$n_folds"_folds_lr"$lr"_batch"$batchSize"_"$dataset_type"
-python3 -u configure_training.py -wd $working_folder -df $dataset_folder -dt $dataset_type -dss $dataset_split_strategy -mc $model_configuration -mn $save_model_name -b $batchSize -f $n_folds -l $loss -lr $lr -ids $ids -v 2 -db True |& tee $log_folder/$save_model_name.log
+python3 -u configure_training.py -wd $working_folder -df $dataset_folder -dt $dataset_type -dss $dataset_split_strategy -mc $model_configuration -mn $save_model_name -b $batchSize -f $n_folds -l $loss -lr $lr -ids $ids -v 2 -db False |& tee $log_folder/$save_model_name.log
 
 python3 -u run_training.py -cf $working_folder/trained_models/$save_model_name/config.json -e 250 -p 250 -db False |& tee -a $log_folder/$save_model_name.log
 
