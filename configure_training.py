@@ -179,13 +179,14 @@ random.seed(29122009)
 if dataset_split_strategy == 'per_volume':
     per_fold_train_files, per_fold_val_files, test_file, summary_ids = utilities.get_per_volume_train_test_val_split(organized_files,
                                         n_folds=N_FOLDS,
+                                        n_repetitions_cv=nbr_kross_validation_repetition,
                                         n_per_class_test_imgs=n_per_class_test_imgs,
                                         test_min_vol_per_class=test_min_vol_per_class,
                                         n_per_class_val_imgs=n_per_class_val_imgs,
                                         val_min_vol_per_class=val_min_vol_per_class)
     # print summary ids if in debug mode
     if debug:
-        for f in range(N_FOLDS):
+        for f in range(N_FOLDS*nbr_kross_validation_repetitions):
             print(f'Fold {f:2d}')
             for cls in organized_files.keys():
                 aus_str = f'    Class {cls:{max([len(c) for c in organized_files.keys()])}s}'
@@ -199,6 +200,7 @@ if dataset_split_strategy == 'per_volume':
 elif dataset_split_strategy == 'per_image':
     per_fold_train_files, per_fold_val_files, test_file = utilities.get_per_image_train_test_val_split(organized_files,
                                         n_folds=N_FOLDS,
+                                        n_repetitions_cv=nbr_kross_validation_repetition,
                                         n_per_class_test_imgs=n_per_class_test_imgs,
                                         n_per_class_val_imgs=n_per_class_val_imgs)
 
@@ -220,7 +222,7 @@ else:
 # setting class weights to 1
 class_weights = [1] * nClasses
 
-for f in range(N_FOLDS):
+for f in range(N_FOLDS*nbr_kross_validation_repetition):
     print(f'Fold {f+1}: training on {len(per_fold_train_files[f]):5d} and validation on {len(per_fold_val_files[f]):5d}')
 print(f'Testing files: {len(test_file)}')
 print(f'{"Class weights":<10s}: {class_weights}')

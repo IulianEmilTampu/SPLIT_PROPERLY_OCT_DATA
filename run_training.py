@@ -111,7 +111,7 @@ elif config['dataset_type'] == 'AIIMS':
     data_gen = utilities.AIIMS_data_gen
 
 for cv in range(config['N_FOLDS']*config['number_crossvalidation_repetitions']):
-    print('Working on fold {cv+1}/{config["N_FOLDS"]*config["number_crossvalidation_repetitions"]}. Start time {datetime.now().strftime("%H:%M:%S")}'))
+    print(f'Working on fold {cv+1}/{config["N_FOLDS"]*config["number_crossvalidation_repetitions"]}. Start time {datetime.now().strftime("%H:%M:%S")}')
 
     print(' - Creating datasets...')
     # create datasets

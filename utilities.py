@@ -157,8 +157,8 @@ def get_per_image_train_test_val_split(organized_files,
     # work on the training and validation
     if n_folds > 1:
         # for every class, do cross validation
-        per_fold_train_files = [[] for i in range(n_folds)]
-        per_fold_val_files = [[] for i in range(n_folds)]
+        per_fold_train_files = [[] for i in range(n_folds*n_repetitions_cv)]
+        per_fold_val_files = [[] for i in range(n_folds*n_repetitions_cv)]
         rkf = RepeatedKFold(n_splits=n_folds, n_repeats=n_repetitions_cv, random_state=2652124)
 
         for cls in organized_files.keys():
@@ -170,8 +170,8 @@ def get_per_image_train_test_val_split(organized_files,
 
     else:
         # only one fold
-        per_fold_train_files = [[] for i in range(n_folds)]
-        per_fold_val_files = [[] for i in range(n_folds)]
+        per_fold_train_files = [[] for i in range(n_folds*n_repetitions_cv)]
+        per_fold_val_files = [[] for i in range(n_folds*n_repetitions_cv)]
 
         for cls in organized_files.keys():
             all_class_files = []
@@ -184,7 +184,7 @@ def get_per_image_train_test_val_split(organized_files,
 
     # shuffle file
     random.shuffle(test_filenames)
-    for f in range(n_folds):
+    for f in range(n_folds*n_repetitions_cv):
         random.shuffle(per_fold_train_files[f])
         random.shuffle(per_fold_val_files[f])
 
@@ -265,8 +265,8 @@ def get_per_volume_train_test_val_split(organized_files,
 
     if n_folds > 1:
         # for every class, do cross validation
-        per_fold_train_files = [[] for i in range(n_folds)]
-        per_fold_val_files = [[] for i in range(n_folds)]
+        per_fold_train_files = [[] for i in range(n_folds*n_repetitions_cv)]
+        per_fold_val_files = [[] for i in range(n_folds*n_repetitions_cv)]
         rkf = RepeatedKFold(n_splits=n_folds, n_repeats=n_repetitions_cv, random_state=2652124)
 
         for cls in organized_files.keys():
@@ -318,7 +318,7 @@ def get_per_volume_train_test_val_split(organized_files,
 
     # shuffle file
     random.shuffle(test_filenames)
-    for f in range(n_folds):
+    for f in range(n_folds*n_repetitions_cv):
         random.shuffle(per_fold_train_files[f])
         random.shuffle(per_fold_val_files[f])
 
