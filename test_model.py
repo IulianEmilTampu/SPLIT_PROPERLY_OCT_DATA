@@ -276,7 +276,7 @@ with open(os.path.join(model_path,f'{model_version}_model_version_test_summary.t
     json.dump(test_summary, fp)
 
 ## save summary (can be improved, but using the routine from print_model_performance)
-from sklearn.metrics import average_precision_score, recall_score, roc_auc_score, f1_score, confusion_matrix, accuracy_score
+from sklearn.metrics import average_precision_score, recall_score, roc_auc_score, f1_score, confusion_matrix, accuracy_score, matthews_corrcoef
 
 def get_metrics(true_logits, pred_logits, average='macro'):
     '''
@@ -330,6 +330,8 @@ def get_metrics(true_logits, pred_logits, average='macro'):
                                         pred_logits,
                                         multi_class='ovr',
                                         average=average)
+    summary_dict['matthews_correlation_coef']=matthews_corrcoef(np.argmax(true_logits,-1),
+                                        np.argmax(pred_logits,-1),)
 
     return summary_dict
 
@@ -443,3 +445,112 @@ overall_metric_str = ''.join([f'{str(round(fp["overall_"+k],3)):^{max_len_k+2}}'
 summary.write(f'{" ":^{max_len_f}}'+f'{"Overall":^{max_len_c}}'+overall_metric_str+'\n')
 
 summary.close()
+
+## save also the information in a .csv file useful for plotting (and hypothesis testing in case)
+'''
+The file should allow for easy plotting of the models performance based on
+classification type, model, model_version (best, last, ensemble_best, ensemble_last),
+metrics, training time inference time.
+'''
+
+def get_time_from_string(time_string):
+    '''
+    Utility that given a time_string formated as 0d:0h:0m:0s:0ms,
+    returns the number of hours
+    '''
+    splits = time_string.split(':')
+    # get the values for d, h, m, s, ms
+    time_values = [ [] for _ in range(len(splits))]
+    [[time_values[idx].append(c) for c in v if c.isnumeric()] for idx, v in enumerate(splits)]
+
+    time_values = [int(''.join(v)) for v in time_values]
+
+    hours = sum([tv*hv for tv, hv in zip(time_values, [24, 1, 1/60, 1/60**2, 1/60**3])])
+
+    return hours
+
+def get_mean_training_time(model_path, model_version='best', debug=False):
+    '''
+    Utility that returns the mean trianing time over the folds
+    '''
+
+    fold_paths = glob.glob(os.path.join(model_path, 'fold_*',''))
+    per_fold_training_time = []
+    for idx, fp in enumerate(fold_paths):
+        # open summary training
+        with open(os.path.join(fp,'model_summary_json.txt')) as json_file:
+            training_summary = json.load(json_file)
+        # get number of hours for the best model
+        training_time = get_time_from_string(training_summary['TRAINING_TIME'])
+
+        # adjust if needed the training time for the last model
+        if model_version == 'last':
+            epoch_training_time = training_time/(training_summary['EPOCHS']+1e-6)
+            training_time = epoch_training_time*250
+
+        if debug:
+            print(f'Fold {idx+1} ({model_version}): {training_time:0.2f}')
+
+        per_fold_training_time.append(training_time)
+    return per_fold_training_time
+
+## work on saving
+import csv
+
+summary_file = os.path.join(model_path,f'{model_version}_tabular_test_summary.csv')
+csv_file = open(summary_file, "w")
+writer = csv.writer(csv_file)
+csv_header = ['classification_type',
+            'nbr_classes',
+            'model_type',
+            'model_version',
+            'fold',
+            'precision',
+            'recall',
+            'accuracy',
+            'f1-score',
+            'auc',
+            'training_time',
+            'matthews_correlation_coef',
+            ]
+writer.writerow(csv_header)
+
+per_fold_training_time = get_mean_training_time(model_path, model_version=model_version)
+classification_type = 'per-disease' if config['dataset_type']=='retinal' else 'normal-vs-cancer'
+nbr_classes = 4 if config['dataset_type']=='retinal' else 2
+
+
+# loop through all the folds and save information
+rows_to_write = []
+for idx, fp in enumerate(per_fold_performance):
+    rows_to_write.append([classification_type,
+            nbr_classes,
+            config['model_configuration'],
+            model_version,
+            idx+1,
+            fp['overall_precision'],
+            fp['overall_recall'],
+            fp['overall_accuracy'],
+            fp['overall_f1-score'],
+            fp['overall_auc'],
+            per_fold_training_time[idx],
+            fp['matthews_correlation_coef'],
+        ])
+# add ensamble information
+rows_to_write.append([classification_type,
+        nbr_classes,
+        config['model_configuration'],
+        'ensemble',
+        'ensemble',
+        performance_ensamble['overall_precision'],
+        performance_ensamble['overall_recall'],
+        performance_ensamble['overall_accuracy'],
+        performance_ensamble['overall_f1-score'],
+        performance_ensamble['overall_auc'],
+        per_fold_training_time[idx],
+        performance_ensamble['matthews_correlation_coef'],
+    ])
+
+writer.writerows(rows_to_write)
+csv_file.close()
+
