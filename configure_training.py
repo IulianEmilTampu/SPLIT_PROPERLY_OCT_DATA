@@ -105,7 +105,7 @@ check_training = args.check_training == 'True'
 # verbose = 2
 # debug = False
 # check_training = False
-  
+
 # check if working folder and dataset folder exist
 if os.path.isdir(working_folder):
     # check if the trained_model folder exists, if not create it
@@ -168,7 +168,7 @@ else:
     raise ValueError(f'The dataset type is not one of the available one. Expected retinal or AIIMS but give {dataset_type}')
 
 ## set training, validation and testing sets
-n_per_class_test_imgs = 50
+n_per_class_test_imgs = 1000
 n_per_class_val_imgs = 100
 test_min_vol_per_class = 2
 val_min_vol_per_class = 2

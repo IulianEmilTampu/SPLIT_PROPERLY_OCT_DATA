@@ -92,7 +92,7 @@ print(f'{"Early stop patience":<26s}: {patience}')
 
 ## create folders where to save the data and models for each fold
 
-for cv in range(config['N_FOLDS']):
+for cv in range(config['N_FOLDS']*config['number_crossvalidation_repetitions']):
     if not os.path.isdir(os.path.join(config['save_model_path'], 'fold_'+str(cv+1))):
         os.mkdir(os.path.join(config['save_model_path'], 'fold_'+str(cv+1)))
 
