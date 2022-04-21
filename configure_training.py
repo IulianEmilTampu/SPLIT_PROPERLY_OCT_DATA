@@ -44,6 +44,7 @@ parser.add_argument('-ids', '--imbalance_data_strategy', required=False, help='S
 parser.add_argument('-mc', '--model_configuration', required=False, help='Provide the Model Configuration (LightOCT or others if implemented in the models_tf.py file).', default='LightOCT')
 parser.add_argument('-mn', '--model_name', required=False, help='Provide the Model Name. This will be used to create the folder where to save the model. If not provided, the current datetime will be used', default=datetime.now().strftime("%H:%M:%S"))
 parser.add_argument('-f', '--folds', required=False, help='Number of folds. Default is 3', default='3')
+parser.add_argument('-nkf', '--nbr_kross_validation_repetition', required=False, help='Number of times the cross validation procedure should be repeated', default=1)
 parser.add_argument('-l', '--loss', required=False, help='Loss to use to train the model (cce or wcce). Default is cce', default='cce')
 parser.add_argument('-lr', '--learning_rate', required=False, help='Learning rate.', default=0.001)
 parser.add_argument('-bs', '--batch_size', required=False, help='Batch size.', default=50)
@@ -72,6 +73,7 @@ learning_rate = float(args.learning_rate)
 batch_size = int(args.batch_size)
 data_augmentation = args.augmentation
 N_FOLDS = int(args.folds)
+nbr_kross_validation_repetition=int(args.nbr_kross_validation_repetition)
 kernel_size = [int(i) for i in args.kernel_size]
 # experiment variables
 random_label_experiment = args.random_label_experiment == 'True'
@@ -280,6 +282,7 @@ json_dict['kernel_size'] = kernel_size
 json_dict['data_augmentation'] = data_augmentation
 
 json_dict['N_FOLDS'] = N_FOLDS
+json_dict['number_crossvalidation_repetitions'] = nbr_kross_validation_repetition
 json_dict['verbose'] = verbose
 json_dict['imbalance_data_strategy'] = imbalance_data_strategy
 json_dict['random_label_experiment'] = random_label_experiment

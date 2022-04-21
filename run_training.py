@@ -75,6 +75,9 @@ with open(configuration_file) as json_file:
     # For backwards compatibility, add random_label_experiment key if not present (False value by default)
     if 'random_label_experiment' not in config.keys():
         config['random_label_experiment']=False
+    # For backwards compatibility, add number of repeated cross vlidation key if not present (1 value by default)
+    if 'number_crossvalidation_repetitions' not in config.keys():
+        config['number_crossvalidation_repetitions']=1
 
 # import custom scripts from the working directory
 sys.path.append(config['working_folder'])
@@ -107,8 +110,8 @@ if config['dataset_type'] == 'retinal':
 elif config['dataset_type'] == 'AIIMS':
     data_gen = utilities.AIIMS_data_gen
 
-for cv in range(config['N_FOLDS']):
-    print('Working on fold {}/{}. Start time {}'.format(cv+1, config['N_FOLDS'], datetime.now().strftime("%H:%M:%S")))
+for cv in range(config['N_FOLDS']*config['number_crossvalidation_repetitions']):
+    print('Working on fold {cv+1}/{config["N_FOLDS"]*config["number_crossvalidation_repetitions"]}. Start time {datetime.now().strftime("%H:%M:%S")}'))
 
     print(' - Creating datasets...')
     # create datasets

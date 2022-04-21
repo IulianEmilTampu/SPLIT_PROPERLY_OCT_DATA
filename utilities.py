@@ -12,7 +12,7 @@ import nibabel as nib
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 from sklearn.metrics import confusion_matrix
-from sklearn.model_selection import KFold
+from sklearn.model_selection import KFold, RepeatedKFold
 
 import tensorflow as tf
 from tensorflow.keras import layers
@@ -110,6 +110,7 @@ def get_AIIMS_organized_files(dataset_folder):
 
 def get_per_image_train_test_val_split(organized_files,
                                     n_folds=1,
+                                    n_repetitions_cv=1, 
                                     n_per_class_test_imgs=250,
                                     n_per_class_val_imgs=250):
     '''
@@ -158,14 +159,15 @@ def get_per_image_train_test_val_split(organized_files,
         # for every class, do cross validation
         per_fold_train_files = [[] for i in range(n_folds)]
         per_fold_val_files = [[] for i in range(n_folds)]
-        kf = KFold(n_splits=n_folds)
+        rkf = RepeatedKFold(n_splits=n_folds, n_repeats=n_repetitions_cv, random_state=2652124)
 
         for cls in organized_files.keys():
             all_class_files = []
             [all_class_files.extend(organized_files[cls][ids]) for ids in organized_files[cls].keys()]
-            for idx, (tr_idx, val_idx) in enumerate(kf.split(all_class_files)):
+            for idx, (tr_idx, val_idx) in enumerate(rkf.split(all_class_files)):
                 per_fold_train_files[idx].extend([all_class_files[tr] for tr in tr_idx if tr not in test_used_class_files_index[cls]])
                 per_fold_val_files[idx].extend([all_class_files[val] for val in val_idx if val not in test_used_class_files_index[cls]])
+
     else:
         # only one fold
         per_fold_train_files = [[] for i in range(n_folds)]
@@ -191,6 +193,7 @@ def get_per_image_train_test_val_split(organized_files,
 
 def get_per_volume_train_test_val_split(organized_files,
                                     n_folds=1,
+                                    n_repetitions_cv=1,
                                     n_per_class_test_imgs=250,
                                     test_min_vol_per_class=2,
                                     n_per_class_val_imgs=250,
@@ -264,7 +267,7 @@ def get_per_volume_train_test_val_split(organized_files,
         # for every class, do cross validation
         per_fold_train_files = [[] for i in range(n_folds)]
         per_fold_val_files = [[] for i in range(n_folds)]
-        kf = KFold(n_splits=n_folds)
+        rkf = RepeatedKFold(n_splits=n_folds, n_repeats=n_repetitions_cv, random_state=2652124)
 
         for cls in organized_files.keys():
             # take out all the IDs for this class that were used for testing
@@ -272,7 +275,7 @@ def get_per_volume_train_test_val_split(organized_files,
             used_val_ids[cls] = []
             used_tr_ids[cls] = []
 
-            for idx, (tr_ids, val_ids) in enumerate(kf.split(remaining_IDs)):
+            for idx, (tr_ids, val_ids) in enumerate(rkf.split(remaining_IDs)):
                 aus_tr_files = [organized_files[cls][remaining_IDs[i]] for i in tr_ids]
                 per_fold_train_files[idx].extend(functools.reduce(operator.concat, aus_tr_files))
                 used_tr_ids[cls].append([remaining_IDs[i] for i in tr_ids])
