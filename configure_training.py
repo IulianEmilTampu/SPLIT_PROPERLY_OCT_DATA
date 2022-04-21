@@ -40,7 +40,7 @@ parser.add_argument('-df', '--dataset_folder', required=True, help='Provide the 
 parser.add_argument('-dt', '--dataset_type', required=True, help='Specifies which dataset (retinal or AIIMS) is given for training. This will be used to set the appropriate dataloader function')
 parser.add_argument('-dss', '--dataset_split_strategy', required=False, help='Specifies the strategy used to split the detaset into training testing and validation. Three options available per_volume, per_image (innapropriate splitting) or original (only OCT2017)', default='per_volume')
 parser.add_argument('-ids', '--imbalance_data_strategy', required=False, help='Strategy to use to tackle imbalance data. Available none or weights', default='weights')
-# model parameters adn training parameters
+# model parameters and training parameters
 parser.add_argument('-mc', '--model_configuration', required=False, help='Provide the Model Configuration (LightOCT or others if implemented in the models_tf.py file).', default='LightOCT')
 parser.add_argument('-mn', '--model_name', required=False, help='Provide the Model Name. This will be used to create the folder where to save the model. If not provided, the current datetime will be used', default=datetime.now().strftime("%H:%M:%S"))
 parser.add_argument('-f', '--folds', required=False, help='Number of folds. Default is 3', default='3')
@@ -49,6 +49,7 @@ parser.add_argument('-lr', '--learning_rate', required=False, help='Learning rat
 parser.add_argument('-bs', '--batch_size', required=False, help='Batch size.', default=50)
 parser.add_argument('-ks', '--kernel_size', nargs='+', required=False, help='Encoder conv kernel size.', default=(5,5))
 parser.add_argument('-augment', '--augmentation', required=False, help='Specify if data augmentation is to be performed (True) or not (False)', default=True)
+parser.add_argument('-rle', '--random_label_experiment', required=False, help='Boolean specifying if the random experiment (random shuffling of the labels) is to be run.', default=False)
 # debug parametres
 parser.add_argument('-v', '--verbose',required=False, help='How much to information to print while training: 0 = none, 1 = at the end of an epoch, 2 = detailed progression withing the epoch.', default=0.1)
 parser.add_argument('-ctd', '--check_training', required=False, help='If True, checks that none of the test images is in the training/validation set. This may take a while depending on the size of the dataset.', default=True)
@@ -72,6 +73,8 @@ batch_size = int(args.batch_size)
 data_augmentation = args.augmentation
 N_FOLDS = int(args.folds)
 kernel_size = [int(i) for i in args.kernel_size]
+# experiment variables
+random_label_experiment = args.random_label_experiment == 'True'
 # debug variables
 verbose = int(args.verbose)
 debug = args.debug == 'True'
@@ -125,17 +128,20 @@ else:
     print(f'{"Configuration file script"}')
     print(f'{"-"*25}\n')
 
-print(f'{"Working directory":<26s}: {working_folder}\n')
-print(f'{"Dataset folder":<26s}: {dataset_folder}')
-print(f'{"Dataset type":<26s}: {dataset_type}')
-print(f'{"Dataset split strategy":<26s}: {dataset_split_strategy} \n')
+aus_space = 30
+print(f'{"Working directory":<{aus_space}s}: {working_folder}\n')
+print(f'{"Dataset folder":<{aus_space}s}: {dataset_folder}')
+print(f'{"Dataset type":<{aus_space}s}: {dataset_type}')
+print(f'{"Dataset split strategy":<{aus_space}s}: {dataset_split_strategy} \n')
 
-print(f'{"Model configuration":<26s}: {model_configuration}')
-print(f'{"Model save name":<26s}: {model_save_name}')
-print(f'{"Loss function":<26s}: {loss}')
-print(f'{"Learning rate":<26s}: {learning_rate}')
-print(f'{"Batch size":<26s}: {batch_size}')
-print(f'{"Data augmentation":<26s}: {data_augmentation} ')
+print(f'{"Model configuration":<{aus_space}s}: {model_configuration}')
+print(f'{"Model save name":<{aus_space}s}: {model_save_name}')
+print(f'{"Loss function":<{aus_space}s}: {loss}')
+print(f'{"Learning rate":<{aus_space}s}: {learning_rate}')
+print(f'{"Batch size":<{aus_space}s}: {batch_size}')
+print(f'{"Data augmentation":<{aus_space}s}: {data_augmentation} ')
+
+print(f'{"Random Lable experiment":<{aus_space}s}: {data_augmentation} ')
 
 # import local utilities
 import utilities
@@ -276,6 +282,7 @@ json_dict['data_augmentation'] = data_augmentation
 json_dict['N_FOLDS'] = N_FOLDS
 json_dict['verbose'] = verbose
 json_dict['imbalance_data_strategy'] = imbalance_data_strategy
+json_dict['random_label_experiment'] = random_label_experiment
 
 json_dict['training'] = per_fold_train_files
 json_dict['validation'] = per_fold_val_files

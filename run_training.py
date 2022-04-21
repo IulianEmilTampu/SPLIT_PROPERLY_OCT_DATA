@@ -72,6 +72,9 @@ else:
 
 with open(configuration_file) as json_file:
     config = json.load(json_file)
+    # For backwards compatibility, add random_label_experiment key if not present (False value by default)
+    if 'random_label_experiment' not in config.keys():
+        config['random_label_experiment']=False
 
 # import custom scripts from the working directory
 sys.path.append(config['working_folder'])
@@ -115,14 +118,17 @@ for cv in range(config['N_FOLDS']):
                             training=True,
                             input_size=config['input_size'],
                             channels=config['n_channels'],
-                            )
+                            random_label_experiment=config['random_label_experiment'],
+                            random_label_experiment_seed=291209)
 
     val_dataset = data_gen(config['validation'][cv],
                             unique_labels=config['unique_labels'],
                             batch_size=config['batch_size'],
                             training=False,
                             input_size=config['input_size'],
-                            channels=config['n_channels'])
+                            channels=config['n_channels'],
+                            random_label_experiment=config['random_label_experiment'],
+                            random_label_experiment_seed=291209)
 
     # create model based on specification
     if config['model_configuration'] == 'LightOCT':

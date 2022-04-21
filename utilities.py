@@ -337,7 +337,9 @@ def retinal_data_gen(img_files,
                 input_size=(240, 400),
                 normalize=True,
                 normalization_strategy=1,
-                categorical=False):
+                categorical=False, 
+                random_label_experiment=False, 
+                random_label_experiment_seed=291209,):
     '''
     Script that uses the file names of the retinal OCT 2D images for tissue classification
     to generate a tf dataset ready for training, validation or test
@@ -386,6 +388,9 @@ def retinal_data_gen(img_files,
     str_labels = [os.path.basename(os.path.dirname(f)) for f in img_files]
     # convert to integer labels
     int_labels = str_to_integer_label(str_labels)
+    # shuffle labels if the random_label_experiment is to be performed
+    if random_label_experiment:
+        random.Random(random_label_experiment_seed).shuffle(int_labels)
     # convert to categorical if needed
     if categorical:
         int_labels = tf.one_hot(int_labels, len(unique_labels))
@@ -433,7 +438,9 @@ def AIIMS_data_gen(img_files,
             input_size=(400, 240),
             normalize=True,
             normalization_strategy=1,
-            categorical=False):
+            categorical=False,
+            random_label_experiment=False, 
+            random_label_experiment_seed=291209,):
     '''
     Script that uses the file names of the retinal OCT 2D images for tissue classification
     to generate a tf dataset ready for training, validation or test
@@ -483,6 +490,9 @@ def AIIMS_data_gen(img_files,
 
     # convert to integer labels
     int_labels = str_to_integer_label(str_labels)
+    # shuffle labels if the random_label_experiment is to be performed
+    if random_label_experiment:
+        random.Random(random_label_experiment_seed).shuffle(int_labels)
     if categorical:
         int_labels = tf.one_hot(int_labels, len(unique_labels))
 

@@ -118,7 +118,9 @@ test_dataset =  data_gen(test_img,
                         batch_size=16,
                         training=False,
                         channels=config['n_channels'],
-                        input_size=config['input_size'])
+                        input_size=config['input_size'], 
+                        random_label_experiment=config['random_label_experiment'],
+                        random_label_experiment_seed=291209)
 
 ## perform testing for each fold the model was trained on
 importlib.reload(utilities_models_tf)
