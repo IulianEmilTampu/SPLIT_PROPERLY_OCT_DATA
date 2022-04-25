@@ -63,16 +63,17 @@ declare -a loss=cce
 
 # declare dataset specification
 declare -a dataset_type=retinal
-declare -a dataset_split_strategy=per_image
+declare -a dataset_split_strategy=per_volume
 declare -a ids=none
 declare -a n_folds=5
+declare -a n_rkf=10
 
 # experiment specifications
 declare -a random_label_experiment=True
 
 
-save_model_name="$model_configuration"_"$dataset_split_strategy"_split_"$n_folds"_folds_lr"$lr"_batch"$batchSize"_"$dataset_type"_rls_"$random_label_experiment"
-python3 -u configure_training.py -wd $working_folder -df $dataset_folder -dt $dataset_type -dss $dataset_split_strategy -mc $model_configuration -mn $save_model_name -b $batchSize -f $n_folds -l $loss -lr $lr -ids $ids -v 2 -db False |& tee $log_folder/$save_model_name.log
+save_model_name="$model_configuration"_"$dataset_split_strategy"_split_"$n_folds"_folds_rkf_"$n_rkf"_lr"$lr"_batch"$batchSize"_"$dataset_type"_rls_"$random_label_experiment"
+python3 -u configure_training.py -wd $working_folder -df $dataset_folder -dt $dataset_type -dss $dataset_split_strategy -mc $model_configuration -mn $save_model_name -b $batchSize -f $n_folds -nkf $n_rkf -l $loss -lr $lr -ids $ids -v 2 -db False -rle $random_label_experiment |& tee $log_folder/$save_model_name.log
 
 python3 -u run_training.py -cf $working_folder/trained_models/$save_model_name/config.json -e 250 -p 250 -db False |& tee -a $log_folder/$save_model_name.log
 

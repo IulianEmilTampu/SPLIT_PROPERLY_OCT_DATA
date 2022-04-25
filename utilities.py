@@ -242,6 +242,7 @@ def get_per_volume_train_test_val_split(organized_files,
     test_filenames = []
     used_test_ids = {}
 
+    # work on the test set
     for cls in organized_files.keys():
         used_test_ids[cls] = []
         aus_cls_files = []
@@ -255,11 +256,11 @@ def get_per_volume_train_test_val_split(organized_files,
                 aus_cls_files.extend(organized_files[cls][t_id])
 
         # since there can be more than n_per_class_test_imgs*len(organized_files.keys()) images, select precisely
-        # test_filenames.extend(random.sample(aus_cls_files, n_per_class_test_imgs))
-        test_filenames.extend(aus_cls_files)
+        test_filenames.extend(random.sample(aus_cls_files, n_per_class_test_imgs))
+        # test_filenames.extend(aus_cls_files)
         used_test_ids[cls].extend(aus_used_t_ids)
 
-    # work on the training and validation
+    # work on the training and validation sets
     used_val_ids = {}
     used_tr_ids = {}
 
@@ -267,7 +268,8 @@ def get_per_volume_train_test_val_split(organized_files,
         # for every class, do cross validation
         per_fold_train_files = [[] for i in range(n_folds*n_repetitions_cv)]
         per_fold_val_files = [[] for i in range(n_folds*n_repetitions_cv)]
-        rkf = RepeatedKFold(n_splits=n_folds, n_repeats=n_repetitions_cv, random_state=2652124)
+        # rkf = RepeatedKFold(n_splits=n_folds, n_repeats=n_repetitions_cv, random_state=2652124)
+        kf = KFold(n_splits=n_folds)
 
         for cls in organized_files.keys():
             # take out all the IDs for this class that were used for testing
@@ -275,7 +277,8 @@ def get_per_volume_train_test_val_split(organized_files,
             used_val_ids[cls] = []
             used_tr_ids[cls] = []
 
-            for idx, (tr_ids, val_ids) in enumerate(rkf.split(remaining_IDs)):
+            # for idx, (tr_ids, val_ids) in enumerate(rkf.split(remaining_IDs)):
+            for idx, (tr_ids, val_ids) in enumerate(kf.split(remaining_IDs)):
                 aus_tr_files = [organized_files[cls][remaining_IDs[i]] for i in tr_ids]
                 per_fold_train_files[idx].extend(functools.reduce(operator.concat, aus_tr_files))
                 used_tr_ids[cls].append([remaining_IDs[i] for i in tr_ids])
@@ -316,7 +319,7 @@ def get_per_volume_train_test_val_split(organized_files,
             per_fold_train_files[0].extend(functools.reduce(operator.concat, aus_train_files))
 
 
-    # shuffle file
+    # shuffle files
     random.shuffle(test_filenames)
     for f in range(n_folds*n_repetitions_cv):
         random.shuffle(per_fold_train_files[f])
@@ -493,9 +496,11 @@ def AIIMS_data_gen(img_files,
 
     # convert to integer labels
     int_labels = str_to_integer_label(str_labels)
+
     # shuffle labels if the random_label_experiment is to be performed
-    if random_label_experiment:
-        random.Random(random_label_experiment_seed).shuffle(int_labels)
+    # if random_label_experiment:
+    #    random.Random(random_label_experiment_seed).shuffle(int_labels)
+
     if categorical:
         int_labels = tf.one_hot(int_labels, len(unique_labels))
 

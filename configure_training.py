@@ -143,7 +143,7 @@ print(f'{"Learning rate":<{aus_space}s}: {learning_rate}')
 print(f'{"Batch size":<{aus_space}s}: {batch_size}')
 print(f'{"Data augmentation":<{aus_space}s}: {data_augmentation} ')
 
-print(f'{"Random Lable experiment":<{aus_space}s}: {data_augmentation} ')
+print(f'{"Random Lable experiment":<{aus_space}s}: {random_label_experiment} ')
 
 # import local utilities
 import utilities
@@ -186,7 +186,7 @@ if dataset_split_strategy == 'per_volume':
                                         val_min_vol_per_class=val_min_vol_per_class)
     # print summary ids if in debug mode
     if debug:
-        for f in range(N_FOLDS*nbr_kross_validation_repetitions):
+        for f in range(N_FOLDS*nbr_kross_validation_repetition):
             print(f'Fold {f:2d}')
             for cls in organized_files.keys():
                 aus_str = f'    Class {cls:{max([len(c) for c in organized_files.keys()])}s}'
