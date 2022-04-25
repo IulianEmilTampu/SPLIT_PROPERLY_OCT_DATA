@@ -63,13 +63,13 @@ declare -a loss=cce
 
 # declare dataset specification
 declare -a dataset_type=AIIMS
-declare -a dataset_split_strategy=per_volume
+declare -a dataset_split_strategy=per_image
 declare -a ids=none
 declare -a n_folds=5
-declare -a n_rkf=1
+declare -a n_rkf=10
 
 # experiment specifications
-declare -a random_label_experiment=False
+declare -a random_label_experiment=True
 
 
 

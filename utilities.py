@@ -268,8 +268,7 @@ def get_per_volume_train_test_val_split(organized_files,
         # for every class, do cross validation
         per_fold_train_files = [[] for i in range(n_folds*n_repetitions_cv)]
         per_fold_val_files = [[] for i in range(n_folds*n_repetitions_cv)]
-        # rkf = RepeatedKFold(n_splits=n_folds, n_repeats=n_repetitions_cv, random_state=2652124)
-        kf = KFold(n_splits=n_folds)
+        rkf = RepeatedKFold(n_splits=n_folds, n_repeats=n_repetitions_cv, random_state=2652124)
 
         for cls in organized_files.keys():
             # take out all the IDs for this class that were used for testing
@@ -277,8 +276,7 @@ def get_per_volume_train_test_val_split(organized_files,
             used_val_ids[cls] = []
             used_tr_ids[cls] = []
 
-            # for idx, (tr_ids, val_ids) in enumerate(rkf.split(remaining_IDs)):
-            for idx, (tr_ids, val_ids) in enumerate(kf.split(remaining_IDs)):
+            for idx, (tr_ids, val_ids) in enumerate(rkf.split(remaining_IDs)):
                 aus_tr_files = [organized_files[cls][remaining_IDs[i]] for i in tr_ids]
                 per_fold_train_files[idx].extend(functools.reduce(operator.concat, aus_tr_files))
                 used_tr_ids[cls].append([remaining_IDs[i] for i in tr_ids])

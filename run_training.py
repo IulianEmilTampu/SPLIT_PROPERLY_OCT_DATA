@@ -115,7 +115,7 @@ for cv in range(config['N_FOLDS']*config['number_crossvalidation_repetitions']):
 
     print(' - Creating datasets...')
     # create datasets
-    train_dataset = data_gen(config['training'][cv][::10000],
+    train_dataset = data_gen(config['training'][cv],
                             unique_labels=config['unique_labels'],
                             batch_size=config['batch_size'],
                             training=True,
