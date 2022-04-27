@@ -496,8 +496,8 @@ def AIIMS_data_gen(img_files,
     int_labels = str_to_integer_label(str_labels)
 
     # shuffle labels if the random_label_experiment is to be performed
-    # if random_label_experiment:
-    #    random.Random(random_label_experiment_seed).shuffle(int_labels)
+    if random_label_experiment:
+       random.Random(random_label_experiment_seed).shuffle(int_labels)
 
     if categorical:
         int_labels = tf.one_hot(int_labels, len(unique_labels))
