@@ -56,8 +56,8 @@ dataset_path = args.dataset_path
 model_version = args.model_version
 
 # # # DEBUG
-# model_path = '/flush/iulta54/Research/P3_OCT_SPLIT_PROPERLY_YOUR_DATA/trained_models/LightOCT_per_volume_split_5_rkf_10_folds_lr0.0001_batch64_AIIMS_rls_True'
-# dataset_path = False
+# model_path = '/flush/iulta54/Research/P3_OCT_SPLIT_PROPERLY_YOUR_DATA/trained_models/LightOCT_per_image_split_5_folds_rkf_10_lr0.0001_batch64_AIIMS_rls_True'
+# dataset_path = "/flush/iulta54/Research/Data/OCT/AIIMS_Dataset/original"
 # model_version = "best"
 
 title="Testing script"
@@ -104,8 +104,10 @@ with open(os.path.join(model_path,'config.json')) as json_file:
     if config['dataset_type'] == 'AIIMS':
         test_img = [os.path.join(dataset_path,pathlib.Path(f).parts[-3], pathlib.Path(f).parts[-2], pathlib.Path(f).parts[-1]) for f in config['test']]
     elif config['dataset_type'] == 'retinal':
-        test_img = [os.path.join(dataset_path, pathlib.Path(f).parts[-2], pathlib.Path(f).parts[-1]) for f in config['test']]
-    # test_img = [os.path.join(dataset_path,pathlib.Path(f).parts[-3], pathlib.Path(f).parts[-2], pathlib.Path(f).parts[-1]) for f in config['test']]
+        # test_img = [os.path.join(dataset_path, pathlib.Path(f).parts[-2], pathlib.Path(f).parts[-1]) for f in config['test']]
+        test_img = [os.path.join(dataset_path,pathlib.Path(f).parts[-3],
+                                              pathlib.Path(f).parts[-2],
+                                              pathlib.Path(f).parts[-1]) for f in config['test']]
 
 # create generator based on model specifications and dataset
 if config['dataset_type'] == 'retinal':

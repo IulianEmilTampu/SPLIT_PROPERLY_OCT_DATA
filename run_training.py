@@ -47,11 +47,11 @@ max_epochs = int(args.epocs)
 patience = int(args.patience)
 
 
-# # # # # # # # DEBUG
-# configuration_file = '/flush/iulta54/Research/P3_1-OCT_DATASET_STUDY/trained_models/TEST/config.json'
-# debug = True
-# max_epochs = 2
-# patience = 5
+# # # # # # # DEBUG
+# configuration_file = '/flush/iulta54/Research/P3_OCT_SPLIT_PROPERLY_YOUR_DATA/trained_models/TEST_LightOCT_dataset_retinal_per_image/config.json'
+# debug = False
+# max_epochs = 50
+# patience = 50
 
 if not os.path.isfile(configuration_file):
     raise ValueError(f'Configuration file not found. Run the configure_training.py script first. Given {configuration_file}')
@@ -110,6 +110,7 @@ if config['dataset_type'] == 'retinal':
 elif config['dataset_type'] == 'AIIMS':
     data_gen = utilities.AIIMS_data_gen
 
+print(config['N_FOLDS'], config['number_crossvalidation_repetitions'])
 for cv in range(config['N_FOLDS']*config['number_crossvalidation_repetitions']):
     print(f'Working on fold {cv+1}/{config["N_FOLDS"]*config["number_crossvalidation_repetitions"]}. Start time {datetime.now().strftime("%H:%M:%S")}')
 

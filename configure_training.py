@@ -84,23 +84,29 @@ check_training = args.check_training == 'True'
 
 
 # # # # # # # # # # #  parse variables
-# working_folder = ""
+# working_folder = "/flush/iulta54/Research/P3_OCT_SPLIT_PROPERLY_YOUR_DATA"
 # # dataset variables
+# # # # # Original retinal dataset
 # # dataset_folder = "/flush/iulta54/Research/Data/OCT/Retinal/Zhang_dataset_version_3/OCT"
-# dataset_folder = "/flush/iulta54/Research/Data/OCT/Retinal/Zhang_dataset/per_class_files"
+# # # # # per-class retinal dataset
+# dataset_folder = "/flush/iulta54/Research/Data/OCT/Retinal/Zhang_dataset_version_3/per_class_files"
+# # # # # AIIMS dataset
 # # dataset_folder = "/flush/iulta54/Research/Data/OCT/AIIMS_Dataset/original"
 # dataset_type = 'retinal'
 # dataset_split_strategy = 'per_image'
 # imbalance_data_strategy = 'none'
 # # model parameters
 # model_configuration = 'LightOCT'
-# model_save_name = 'TEST'
+# model_save_name = f'TEST_{model_configuration}_dataset_{dataset_type}_{dataset_split_strategy}'
 # loss = 'cce'
 # learning_rate = 0.001
 # batch_size = 256
 # data_augmentation = True
 # N_FOLDS = 5
+# nbr_kross_validation_repetition=1
 # kernel_size = (3,3)
+# # # experiment variables
+# random_label_experiment = False
 # # debug variables
 # verbose = 2
 # debug = False
@@ -208,11 +214,14 @@ elif all([dataset_type == 'retinal', dataset_split_strategy == 'original']):
     # get the training and test images from the original downloaded folder.
     # Using the test files as validation
     per_fold_train_files = [glob.glob(os.path.join(dataset_folder, 'train','*','*'))]
+    # shuffle images
+    random.shuffle(per_fold_train_files[0])
     per_fold_val_files = [glob.glob(os.path.join(dataset_folder, 'test','*','*'))]
     test_file = per_fold_val_files[0]
 
     # given the original split, setting the fold number to 1
     N_FOLDS = 1
+    nbr_kross_validation_repetition = 1
     # get the number of classes
     unique_labels = [os.path.basename(f) for f in glob.glob(os.path.join(dataset_folder, 'train','*'))]
     nClasses =len(unique_labels)
@@ -222,8 +231,11 @@ else:
 # setting class weights to 1
 class_weights = [1] * nClasses
 
-for f in range(N_FOLDS*nbr_kross_validation_repetition):
-    print(f'Fold {f+1}: training on {len(per_fold_train_files[f]):5d} and validation on {len(per_fold_val_files[f]):5d}')
+if dataset_split_strategy == 'original':
+    print(f'Training only one fold. Training on {len(per_fold_train_files[0])} and validation on {len(per_fold_val_files[0])}')
+else:
+    for f in range(N_FOLDS*nbr_kross_validation_repetition):
+        print(f'Fold {f+1}: training on {len(per_fold_train_files[f]):5d} and validation on {len(per_fold_val_files[f]):5d}')
 print(f'Testing files: {len(test_file)}')
 print(f'{"Class weights":<10s}: {class_weights}')
 
