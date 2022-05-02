@@ -15,6 +15,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import KFold, RepeatedKFold
 
 import tensorflow as tf
+import tensorflow_io as tfio
 from tensorflow.keras import layers
 from tensorflow.keras.models import Model
 from tensorflow.keras.utils import to_categorical
@@ -25,7 +26,7 @@ warnings.filterwarnings("ignore")
 
 ## UTILITIES FOR ORGANISING THE FILES
 
-def get_retinal_organized_files(dataset_folder):
+def get_Kermany_organized_files(dataset_folder):
     '''
     Utility that given the path to the OCT2017 containing the folders of
     the different classes, organises the files in a dictionary nested as:
@@ -105,6 +106,54 @@ def get_AIIMS_organized_files(dataset_folder):
             organized_files[cls][ids] = glob.glob(os.path.join(class_folder, ids,'*'))
             count_total_files += len(organized_files[cls][ids])
 
+    print(f'\n{count_total_files} total files')
+    return organized_files
+
+def get_Srinivas_organized_files(dataset_folder):
+    '''
+    Utility that given the path to the Srinivas dataset containing the folders of
+    the different subjects, organises the files in a dictionary nested as:
+    class_name
+        subject_ID or volume ID
+            file name
+
+    INPUT
+    dataset_folder : str
+            Path to the folder containing the folders of the different subjects
+
+    OUTPUT
+    organized_files : dict
+            A dictionary where the data is organized in hierarchical fashion:
+            class_name
+                subject_ID or volume ID
+                    file name
+    '''
+    count_total_files = 0
+    # get class names and create dictionary
+    class_names = []
+    subjects_folders = glob.glob(os.path.join(dataset_folder, '*'))
+    for subj_folder in subjects_folders:
+        '''
+        The folders in the dataset are named ClassNameNumber. We only want the ClassName
+        thus, here we find the index of the first not digit in the folder basename and
+        use that to take the ClassName
+        '''
+        indx = [s.isdigit() for s in os.path.basename(subj_folder)].index(True)
+        class_names.append(os.path.basename(subj_folder)[0:indx])
+
+    organized_files = dict.fromkeys(class_names)
+
+    # loop through all the classes and get the file names of all the images belonging to all the subjects
+    for idx, cls in enumerate(organized_files.keys()):
+        # loop through all the subject folders and, if belonging to the class, get the file names
+        organized_files[cls] = {}
+        for subj_folder in subjects_folders:
+            if cls in os.path.basename(subj_folder):
+                print(f'Organizing dataset. Working on class {cls} \r', end='')
+                subj_id = os.path.basename(subj_folder)
+                organized_files[cls][subj_id] = glob.glob(os.path.join(subj_folder, 'TIFFs', '8bitTIFFs','*'))
+                count_total_files += len(organized_files[cls][subj_id])
+                
     print(f'\n{count_total_files} total files')
     return organized_files
 
@@ -333,7 +382,7 @@ def get_per_volume_train_test_val_split(organized_files,
 
 ## TENSORFLOW DATA GENERATOR for RETINAL DATASET
 
-def retinal_data_gen(img_files,
+def Kermany_data_gen(img_files,
                 unique_labels=None,
                 batch_size=1,
                 training=True,
@@ -345,7 +394,7 @@ def retinal_data_gen(img_files,
                 random_label_experiment=False, 
                 random_label_experiment_seed=291209,):
     '''
-    Script that uses the file names of the retinal OCT 2D images for tissue classification
+    Script that uses the file names of Kermany OCT 2D images for tissue classification
     to generate a tf dataset ready for training, validation or test
 
     INPUT
@@ -446,7 +495,7 @@ def AIIMS_data_gen(img_files,
             random_label_experiment=False, 
             random_label_experiment_seed=291209,):
     '''
-    Script that uses the file names of the retinal OCT 2D images for tissue classification
+    Script that uses the file names of the AIIMS OCT 2D images for tissue classification
     to generate a tf dataset ready for training, validation or test
 
     INPUT
@@ -480,7 +529,6 @@ def AIIMS_data_gen(img_files,
 
     # get string labels from the file names (assuming .../LABEL/Subject/LABEL_0001.extension)
     str_labels = [pathlib.Path(f).parts[-3] for f in img_files]
-
     def str_to_integer_label(str_labels, unique_labels=None):
         '''
         Converts a list of string based labels to integers
@@ -515,6 +563,124 @@ def AIIMS_data_gen(img_files,
     # dataset = dataset.map(tf.autograph.experimental.do_not_convert(lambda x, y: (tf.image.crop_to_bounding_box(x, offset_height=61, offset_width=110, target_height=input_size[0], target_width=input_size[1]),y)))
     dataset = dataset.map(tf.autograph.experimental.do_not_convert(lambda x, y: (tf.image.resize(x,size=input_size, method=tf.image.ResizeMethod.BILINEAR),y)))
 
+    if normalize:
+        '''
+        There is a problem with the normalization sice the scale bar is perfect white while the overll images
+        do not have such value. This squeezes the histogram of the normalized image to be
+        very small. Need to normalize using quantiles.
+        Quantile values are computed on the test detaset and correspond to 2% and
+        98% quantiles.
+        '''
+        # quantile values obtained on the training set
+        q_min = 0
+        q_max = 88
+        if normalization_strategy == 1:
+            # normalize images [-1, 1]
+            dataset = dataset.map(tf.autograph.experimental.do_not_convert(lambda x, y: (2 * (x-q_min) / (q_max-q_min) - 1, y)))
+
+        elif normalization_strategy == 0:
+            # normalize images [0, 1]
+            normalizer = layers.experimental.preprocessing.Rescaling(1./255, offset=0)
+            dataset = dataset.map(tf.autograph.experimental.do_not_convert(lambda x, y: (normalizer(x), y)))
+        else:
+            print(f'Unknown normalization strategy. Given {normalization_strategy} expected 0 for [0,1] or 1 for [-1,1] normalization')
+            sys.exit()
+
+    # set up dataset
+    AUTOTUNE = tf.data.AUTOTUNE
+    if training is True:
+        dataset = dataset.shuffle(5000)
+
+    dataset = dataset.prefetch(buffer_size=AUTOTUNE)
+    dataset = dataset.batch(batch_size=batch_size)
+
+    return dataset
+
+def Srinivas_data_gen(img_files,
+            unique_labels=None,
+            batch_size=1,
+            training=True,
+            channels=3,
+            input_size=(768,496),
+            normalize=True,
+            normalization_strategy=1,
+            categorical=False,
+            random_label_experiment=False, 
+            random_label_experiment_seed=291209,):
+    '''
+    Script that uses the file names of Srinivas OCT 2D images for tissue classification
+    to generate a tf dataset ready for training, validation or test
+
+    INPUT
+    image_files : list
+        List of strings of path to the image files
+    unique_labels : list
+        List of strings specifying the unique labels in the dataset. If not given
+        the unique labels will be infered from the folder where the files are
+        located.
+    batch_size : int
+    training : bool
+        True if the dataset will be used for training. This will shuffle the dataset
+        as well as prefetch it.
+    channels : int
+        Number of channels of the input images
+    input_size : tuple
+        Desired size of the images to be outputed by the generator
+    normalize : bool
+        If to perform normalization or not.
+    normalization_strategy : int
+        Value used to select the type of normalization. 0 for [0,1] or 1 for
+        [-1,1] normalization
+    categorical : bool
+        If true the labels will be outputed as categorical.
+
+    OUTPUT
+
+    dataset : tf dataset
+        A tf dataset with the first instance the image and the second the labels.
+    '''
+
+    # get string labels from the file names (assuming .../LabelNmber/TIFFs/8bitTIFFs/file.extension)
+    str_labels = [pathlib.Path(f).parts[-4] for f in img_files]
+    class_names = []
+    for label_name in str_labels:
+        indx = [s.isdigit() for s in label_name].index(True)
+        class_names.append(label_name[0:indx])
+
+    def str_to_integer_label(str_labels, unique_labels=None):
+        '''
+        Converts a list of string based labels to integers
+        '''
+        if unique_labels is None:
+            unique_labels = list(set(str_labels))
+            unique_labels.sort()
+
+        int_labels = [(unique_labels.index(l)) for l in str_labels]
+        return int_labels
+
+    # convert to integer labels
+    int_labels = str_to_integer_label(class_names)
+
+    # shuffle labels if the random_label_experiment is to be performed
+    if random_label_experiment:
+       random.Random(random_label_experiment_seed).shuffle(int_labels)
+
+    if categorical:
+        int_labels = tf.one_hot(int_labels, len(unique_labels))
+
+    # create tf dataset
+    dataset = tf.data.Dataset.from_tensor_slices((tf.constant(img_files), tf.constant(int_labels)))
+
+    # actually open the images
+    dataset = dataset.map(tf.autograph.experimental.do_not_convert(lambda x, y: (tf.cast(tfio.experimental.image.decode_tiff(tf.io.read_file(x), index=0),tf.float32), y)))
+    # convert to gray scale
+    dataset = dataset.map(tf.autograph.experimental.do_not_convert(lambda x, y: (tf.image.rgb_to_grayscale(x[:,:,0:-1]), y)))
+
+
+    # crop to specified input size
+    # dataset = dataset.map(tf.autograph.experimental.do_not_convert(lambda x, y: (tf.image.crop_to_bounding_box(x, offset_height=61, offset_width=110, target_height=input_size[0], target_width=input_size[1]),y)))
+    dataset = dataset.map(tf.autograph.experimental.do_not_convert(lambda x, y: (tf.image.resize(x,size=input_size, method=tf.image.ResizeMethod.BILINEAR),y)))
+
 
     if normalize:
         '''
@@ -524,14 +690,12 @@ def AIIMS_data_gen(img_files,
         Quantile values are computed on the test detaset and correspond to 2% and
         98% quantiles.
         '''
+        # quantile values obtained on the training set
         q_min = 0
-        q_max = 88.829
+        q_max = 250
         if normalization_strategy == 1:
             # normalize images [-1, 1]
-            # normalizer = layers.experimental.preprocessing.Rescaling(1./127.5, offset=-1)
-            # dataset = dataset.map(tf.autograph.experimental.do_not_convert(lambda x, y: (normalizer(x), y)))
             dataset = dataset.map(tf.autograph.experimental.do_not_convert(lambda x, y: (2 * (x-q_min) / (q_max-q_min) - 1, y)))
-
 
         elif normalization_strategy == 0:
             # normalize images [0, 1]
@@ -806,7 +970,7 @@ def plotPR(GT, PRED, classes, savePath=None, saveName=None, draw=False):
         'micro':f1_score(GT, np.argmax(PRED, axis=-1), average='micro'),
         'macro':f1_score(GT, np.argmax(PRED, axis=-1), average='macro')
     }
-    print('F1-score (micro and macro): {0:0.2f} and {0:0.2f}'.format(F1['micro'], F1['macro']))
+    # print('F1-score (micro and macro): {0:0.2f} and {0:0.2f}'.format(F1['micro'], F1['macro']))
 
     # make labels categorical
     GT = to_categorical(GT, num_classes=n_classes)
@@ -820,8 +984,8 @@ def plotPR(GT, PRED, classes, savePath=None, saveName=None, draw=False):
     # Compute micro-average ROC curve and ROC area
     precision["micro"], recall["micro"], _ = precision_recall_curve(GT.ravel(), PRED.ravel())
     average_precision["micro"] = average_precision_score(GT, PRED, average='micro')
-    print('Average precision score, micro-averaged over all classes: {0:0.2f}'
-      .format(average_precision["micro"]))
+    # print('Average precision score, micro-averaged over all classes: {0:0.2f}'
+    #  .format(average_precision["micro"]))
 
 
     # Plot all PR curves and save

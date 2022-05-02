@@ -4,6 +4,7 @@ classification. This code is designed to work for the two following datasets:
 1 - OCT2017: doi 10.17632/rscbjbr9sj.2
              https://data.mendeley.com/datasets/rscbjbr9sj/2.
 2 - AIIMS dataset: https://www.bioailab.org/datasets
+3 - Srinivas dataset: https://people.duke.edu/~sf59/Srinivasan_BOE_2014_dataset.htm
 
 The model set by this configuration script is the LigthOCT model proposed by
 Butola et al., in 2020. DOI https://doi.org/10.1364/BOE.395487
@@ -12,6 +13,7 @@ The configuration script takes inline inputs. For a description of all available
 input parameters, runt configure_training.py --help
 '''
 
+from ast import parse
 import os
 import sys
 import json
@@ -37,9 +39,10 @@ parser = argparse.ArgumentParser(description='Script that configures a cross-val
 parser.add_argument('-wd','--working_directory' ,required=False, help='Provide the Working Directory where the models_tf.py, utilities.py and utilities_models_tf.py files are. This folder will also be the one where the trained models will be saved. If not provided, the current working directory is used', default=os.getcwd())
 # dataset parameters
 parser.add_argument('-df', '--dataset_folder', required=True, help='Provide the Dataset Folder where the downloaded dataset are located. Note that for the OCT2017 dataset in case of per_image or per_volume split strategy, the images should be first reorganized using the refine_dataset.py script. Give the original dataset path in case the original_split strategy is set.')
-parser.add_argument('-dt', '--dataset_type', required=True, help='Specifies which dataset (retinal or AIIMS) is given for training. This will be used to set the appropriate dataloader function')
+parser.add_argument('-dt', '--dataset_type', required=True, help='Specifies which dataset (Kermany, AIIMS, Srinivas) is given for training. This will be used to set the appropriate dataloader function')
 parser.add_argument('-dss', '--dataset_split_strategy', required=False, help='Specifies the strategy used to split the detaset into training testing and validation. Three options available per_volume, per_image (innapropriate splitting) or original (only OCT2017)', default='per_volume')
 parser.add_argument('-ids', '--imbalance_data_strategy', required=False, help='Strategy to use to tackle imbalance data. Available none or weights', default='weights')
+parser.add_argument('-ntspc', '--number_test_images_per_class', required=False, help='(int) Number of test images to select from each class. For AIIMS and Kermany datasets this should be set to 1000. For Srinivas dataset to 250 given the limited number of dataset images.', default=1000)
 # model parameters and training parameters
 parser.add_argument('-mc', '--model_configuration', required=False, help='Provide the Model Configuration (LightOCT or others if implemented in the models_tf.py file).', default='LightOCT')
 parser.add_argument('-mn', '--model_name', required=False, help='Provide the Model Name. This will be used to create the folder where to save the model. If not provided, the current datetime will be used', default=datetime.now().strftime("%H:%M:%S"))
@@ -65,6 +68,7 @@ dataset_folder = args.dataset_folder
 dataset_type = args.dataset_type
 dataset_split_strategy = args.dataset_split_strategy
 imbalance_data_strategy = args.imbalance_data_strategy
+number_test_images_per_class = int(args.number_test_images_per_class)
 # model parameters
 model_configuration = args.model_configuration
 model_save_name = args.model_name
@@ -92,7 +96,7 @@ check_training = args.check_training == 'True'
 # dataset_folder = "/flush/iulta54/Research/Data/OCT/Retinal/Zhang_dataset_version_3/per_class_files"
 # # # # # AIIMS dataset
 # # dataset_folder = "/flush/iulta54/Research/Data/OCT/AIIMS_Dataset/original"
-# dataset_type = 'retinal'
+# dataset_type = 'Kermany'
 # dataset_split_strategy = 'per_image'
 # imbalance_data_strategy = 'none'
 # # model parameters
@@ -157,24 +161,36 @@ import utilities
 ## get file names organised as class/subject-volume/file
 importlib.reload(utilities)
 
-if dataset_type == 'retinal':
+if any([dataset_type == 'retinal', dataset_type == 'Kermany']):
     if any([dataset_split_strategy=='per_volume', dataset_split_strategy=='per_image']):
         # heuristic for the retinal dataset only if not using the original split
-        organized_files = utilities.get_retinal_organized_files(dataset_folder)
+        organized_files = utilities.get_Kermany_organized_files(dataset_folder)
 
         unique_labels = list(organized_files.keys())
         nClasses =len(unique_labels)
+        input_size = [240, 400]
+        n_channels = 1
 elif dataset_type == 'AIIMS':
     # heuristic for the AIIMS dataset
     organized_files = utilities.get_AIIMS_organized_files(dataset_folder)
 
     unique_labels = list(organized_files.keys())
     nClasses =len(unique_labels)
+    input_size = [400, 240]
+    n_channels = 3
+elif dataset_type == 'Srinivas':
+    # heuristic for the Srinivas dataset
+    organized_files = utilities.get_Srinivas_organized_files(dataset_folder)
+
+    unique_labels = list(organized_files.keys())
+    nClasses =len(unique_labels)
+    input_size = [768,496]
+    n_channels = 3
 else:
-    raise ValueError(f'The dataset type is not one of the available one. Expected retinal or AIIMS but give {dataset_type}')
+    raise ValueError(f'The dataset type is not one of the available one. Expected Kermany,AIIMS or Srinivas but give {dataset_type}')
 
 ## set training, validation and testing sets
-n_per_class_test_imgs = 1000
+n_per_class_test_imgs = number_test_images_per_class
 n_per_class_val_imgs = 100
 test_min_vol_per_class = 2
 val_min_vol_per_class = 2
@@ -210,7 +226,7 @@ elif dataset_split_strategy == 'per_image':
                                         n_per_class_test_imgs=n_per_class_test_imgs,
                                         n_per_class_val_imgs=n_per_class_val_imgs)
 
-elif all([dataset_type == 'retinal', dataset_split_strategy == 'original']):
+elif all([any([dataset_type == 'retinal', dataset_type == 'Kermany']), dataset_split_strategy == 'original']):
     # get the training and test images from the original downloaded folder.
     # Using the test files as validation
     per_fold_train_files = [glob.glob(os.path.join(dataset_folder, 'train','*','*'))]
@@ -253,7 +269,7 @@ if check_training:
                 if dataset_type == 'AIIMS':
                     ts_id = pathlib.Path(ts).parts[-2]
                     tr_id = pathlib.Path(tr).parts[-2]
-                elif dataset_type == 'retinal':
+                elif dataset_type == any([dataset_type == 'retinal', dataset_type == 'Kermany']):
                     ts_id = os.path.join(pathlib.Path(ts).parts[-2],
                                          pathlib.Path(ts).parts[-1])
                     ts_id = ts_id[0:ts_id.rfind('-')]
@@ -261,6 +277,9 @@ if check_training:
                     tr_id = os.path.join(pathlib.Path(tr).parts[-2],
                                          pathlib.Path(tr).parts[-1])
                     tr_id = tr_id[0:tr_id.rfind('-')]
+                elif dataset_type == 'Srinivas':
+                    ts_id = os.path.join(pathlib.Path(ts).parts[-4], pathlib.Path(ts).parts[-3], pathlib.Path(ts).parts[-4], pathlib.Path(ts).parts[-1]) 
+                    tr_id = os.path.join(pathlib.Path(tr).parts[-4], pathlib.Path(tr).parts[-3], pathlib.Path(tr).parts[-4], pathlib.Path(tr).parts[-1]) 
                 print(f'Checked {idx+1}/{len(test_file)} ({ts_id}/{tr_id})\r', end='')
                 if tr_id == ts_id:
                     duplicated.append(ts)
@@ -290,8 +309,8 @@ json_dict['model_save_name'] = model_save_name
 json_dict['loss'] = loss
 json_dict['learning_rate'] = learning_rate
 json_dict['batch_size'] = batch_size
-json_dict['input_size'] = [240, 400] if dataset_type=='retinal' else [400, 240]
-json_dict['n_channels'] = 1 if dataset_type=='retinal' else 3
+json_dict['input_size'] = input_size
+json_dict['n_channels'] = n_channels
 json_dict['kernel_size'] = kernel_size
 json_dict['data_augmentation'] = data_augmentation
 

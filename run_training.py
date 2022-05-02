@@ -105,10 +105,12 @@ test_fold_summary = {}
 
 # ############################ TRAINING
 # specify data generator specific for the different types of datasets
-if config['dataset_type'] == 'retinal':
-    data_gen = utilities.retinal_data_gen
+if any([config['dataset_type'] == 'retinal', config['dataset_type'] == 'Kermany']):
+    data_gen = utilities.Kermany_data_gen
 elif config['dataset_type'] == 'AIIMS':
     data_gen = utilities.AIIMS_data_gen
+elif config['dataset_type'] == 'Srinivas':
+    data_gen = utilities.Srinivas_data_gen
 
 print(config['N_FOLDS'], config['number_crossvalidation_repetitions'])
 for cv in range(config['N_FOLDS']*config['number_crossvalidation_repetitions']):

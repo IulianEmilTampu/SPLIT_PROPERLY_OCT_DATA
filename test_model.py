@@ -101,19 +101,29 @@ with open(os.path.join(model_path,'config.json')) as json_file:
 
     # take one testing
     # make sure that the files point to this system dataset
-    if config['dataset_type'] == 'AIIMS':
-        test_img = [os.path.join(dataset_path,pathlib.Path(f).parts[-3], pathlib.Path(f).parts[-2], pathlib.Path(f).parts[-1]) for f in config['test']]
-    elif config['dataset_type'] == 'retinal':
-        # test_img = [os.path.join(dataset_path, pathlib.Path(f).parts[-2], pathlib.Path(f).parts[-1]) for f in config['test']]
-        test_img = [os.path.join(dataset_path,pathlib.Path(f).parts[-3],
-                                              pathlib.Path(f).parts[-2],
-                                              pathlib.Path(f).parts[-1]) for f in config['test']]
+    # fix names based on the given dataset path
+    if any([config['dataset_type'] == 'retinal', config['dataset_type'] == 'Kermany']):
+        idx =  3
+    elif config['dataset_type'] == 'AIIMS':
+        idx =  4
+    elif config['dataset_type'] == 'Srinivas':
+        idx =  5
+    
+    test_img= []
+    # build file names to point to this given dataset
+    for f in config['test']:
+        aus = [pathlib.Path(f).parts[-i] for i in reversed(range(idx))][0:-1]
+        aus.insert(0, dataset_path)
+        test_img.append(os.path.join(*aus))
 
 # create generator based on model specifications and dataset
-if config['dataset_type'] == 'retinal':
-    data_gen = utilities.retinal_data_gen
+if any([config['dataset_type'] == 'retinal', config['dataset_type'] == 'Kermany']):
+    data_gen = utilities.Kermany_data_gen
 elif config['dataset_type'] == 'AIIMS':
     data_gen = utilities.AIIMS_data_gen
+elif config['dataset_type'] == 'Srinivas':
+    data_gen = utilities.Srinivas_data_gen
+
 
 test_dataset =  data_gen(test_img,
                         unique_labels=config['unique_labels'],
@@ -351,13 +361,7 @@ labels = np.eye(np.unique(test_summary['labels']).shape[0])[test_summary['labels
 pred_logits = test_summary['folds_test_logits_values']
 
 # Computupe per fold performance
-performance_fold = {
-            'ROC_AUC':[],
-            'Precision': [],
-            'Recall':[],
-            'F1':[],
-            'Accuracy':[]
-                }
+
 per_fold_performance = []
 
 for f in range(len(folds)):
@@ -455,6 +459,11 @@ overall_metric_str = ''.join([f'{str(round(fp["overall_"+k],3)):^{max_len_k+2}}'
 summary.write(f'{" ":^{max_len_f}}'+f'{"Overall":^{max_len_c}}'+overall_metric_str+'\n')
 
 summary.close()
+
+## print on terminal
+print('Ensemble preformance\n')
+max_len = max([len(key) for key in performance_ensamble.keys()])
+[print(f'{key:{max_len}s}: {value}') for key, value in performance_ensamble.items()]
 
 ## save also the information in a .csv file useful for plotting (and hypothesis testing in case)
 '''
