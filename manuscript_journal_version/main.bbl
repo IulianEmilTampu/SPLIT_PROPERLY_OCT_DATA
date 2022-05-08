@@ -1,0 +1,308 @@
+\begin{thebibliography}{10}
+\urlstyle{rm}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname doiprefix\endcsname\relax\def\doiprefix{DOI: }\fi
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem{xu2018splitting}
+\bibinfo{author}{Xu, Y.} \& \bibinfo{author}{Goodacre, R.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{On Splitting Training and
+  Validation Set: A Comparative Study of Cross-Validation, Bootstrap and
+  Systematic Sampling for Estimating the Generalization Performance of
+  Supervised Learning}}}.
+\newblock {\emph{\JournalTitle{Journal of analysis and testing}}}
+  \textbf{\bibinfo{volume}{2}}, \bibinfo{pages}{249--262}
+  (\bibinfo{year}{2018}).
+
+\bibitem{kuhn2013applied}
+\bibinfo{author}{Kuhn, M.}, \bibinfo{author}{Johnson, K.} \emph{et~al.}
+\newblock \emph{\bibinfo{title}{Applied predictive modeling}},
+  vol.~\bibinfo{volume}{26} (\bibinfo{publisher}{Springer},
+  \bibinfo{year}{2013}).
+
+\bibitem{guyon1997scaling}
+\bibinfo{author}{Guyon, I.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A scaling law for the
+  validation-set training-set size ratio}}.
+\newblock {\emph{\JournalTitle{AT\&T Bell Laboratories}}}
+  \textbf{\bibinfo{volume}{1}} (\bibinfo{year}{1997}).
+
+\bibitem{refaeilzadeh2009cross}
+\bibinfo{author}{Refaeilzadeh, P.}, \bibinfo{author}{Tang, L.} \&
+  \bibinfo{author}{Liu, H.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Cross-validation.}}
+\newblock {\emph{\JournalTitle{Encyclopedia of database systems}}}
+  \textbf{\bibinfo{volume}{5}}, \bibinfo{pages}{532--538}
+  (\bibinfo{year}{2009}).
+
+\bibitem{litjens2017survey}
+\bibinfo{author}{Litjens, G.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A survey on deep learning in
+  medical image analysis}}.
+\newblock {\emph{\JournalTitle{Medical image analysis}}}
+  \textbf{\bibinfo{volume}{42}}, \bibinfo{pages}{60--88}
+  (\bibinfo{year}{2017}).
+
+\bibitem{ker2017deep}
+\bibinfo{author}{Ker, J.}, \bibinfo{author}{Wang, L.}, \bibinfo{author}{Rao,
+  J.} \& \bibinfo{author}{Lim, T.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{Deep Learning Applications in
+  Medical Image Analysis}}}.
+\newblock {\emph{\JournalTitle{Ieee Access}}} \textbf{\bibinfo{volume}{6}},
+  \bibinfo{pages}{9375--9389} (\bibinfo{year}{2017}).
+
+\bibitem{anwar2018medical}
+\bibinfo{author}{Anwar, S.~M.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{Medical Image Analysis using
+  Convolutional Neural Networks: A Review}}}.
+\newblock {\emph{\JournalTitle{Journal of medical systems}}}
+  \textbf{\bibinfo{volume}{42}}, \bibinfo{pages}{1--13} (\bibinfo{year}{2018}).
+
+\bibitem{maier2018rankings}
+\bibinfo{author}{Maier-Hein, L.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Why rankings of biomedical image
+  analysis competitions should be interpreted with care}}.
+\newblock {\emph{\JournalTitle{Nature communications}}}
+  \textbf{\bibinfo{volume}{9}}, \bibinfo{pages}{1--13} (\bibinfo{year}{2018}).
+
+\bibitem{wang2019deep}
+\bibinfo{author}{Wang, H.}, \bibinfo{author}{Won, D.} \& \bibinfo{author}{Yoon,
+  S.~W.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A deep separable neural network for
+  human tissue identification in three-dimensional optical coherence tomography
+  images}}.
+\newblock {\emph{\JournalTitle{IISE Transactions on Healthcare Systems
+  Engineering}}} \textbf{\bibinfo{volume}{9}}, \bibinfo{pages}{250--271}
+  (\bibinfo{year}{2019}).
+
+\bibitem{butola2020deep}
+\bibinfo{author}{Butola, A.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Deep learning architecture
+  “{LightOCT}” for diagnostic decision support using optical coherence
+  tomography images of biological samples}}.
+\newblock {\emph{\JournalTitle{Biomedical Optics Express}}}
+  \textbf{\bibinfo{volume}{11}}, \bibinfo{pages}{5017--5031}
+  (\bibinfo{year}{2020}).
+
+\bibitem{irmak2021multi}
+\bibinfo{author}{Irmak, E.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Multi-classification of brain tumor
+  {MRI} images using deep convolutional neural network with fully optimized
+  framework}}.
+\newblock {\emph{\JournalTitle{Iranian Journal of Science and Technology,
+  Transactions of Electrical Engineering}}} \textbf{\bibinfo{volume}{45}},
+  \bibinfo{pages}{1015--1036} (\bibinfo{year}{2021}).
+
+\bibitem{sadad2021brain}
+\bibinfo{author}{Sadad, T.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Brain tumor detection and
+  multi-classification using advanced deep learning techniques}}.
+\newblock {\emph{\JournalTitle{Microscopy Research and Technique}}}
+  \textbf{\bibinfo{volume}{84}}, \bibinfo{pages}{1296--1308}
+  (\bibinfo{year}{2021}).
+
+\bibitem{yagis2021effect}
+\bibinfo{author}{Yagis, E.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Effect of data leakage in brain
+  {MRI} classification using {2D} convolutional neural networks}}.
+\newblock {\emph{\JournalTitle{Scientific reports}}}
+  \textbf{\bibinfo{volume}{11}}, \bibinfo{pages}{1--13} (\bibinfo{year}{2021}).
+
+\bibitem{butola2019volumetric}
+\bibinfo{author}{Butola, A.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Volumetric analysis of breast
+  cancer tissues using machine learning and swept-source optical coherence
+  tomography}}.
+\newblock {\emph{\JournalTitle{Applied optics}}} \textbf{\bibinfo{volume}{58}},
+  \bibinfo{pages}{A135--A141} (\bibinfo{year}{2019}).
+
+\bibitem{kermany2018large}
+\bibinfo{author}{Kermany, D.}, \bibinfo{author}{Zhang, K.} \&
+  \bibinfo{author}{Goldbaum, M.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{Large Dataset of Labeled Optical
+  Coherence tomography (OCT) and Chest X-Ray images}}}.
+\newblock {\emph{\JournalTitle{Mendeley Data}}} \textbf{\bibinfo{volume}{3}},
+  \bibinfo{pages}{10--17632} (\bibinfo{year}{2018}).
+
+\bibitem{Retinalkaggle}
+\bibinfo{title}{{Retinal OCT Images} (optical coherence tomography)}.
+\newblock
+  \bibinfo{howpublished}{\url{https://kaggle.com/paultimothymooney/kermany2018}}.
+\newblock \bibinfo{note}{Accessed: 2022-02-10}.
+
+\bibitem{kamran2019optic}
+\bibinfo{author}{Kamran, S.~A.}, \bibinfo{author}{Saha, S.},
+  \bibinfo{author}{Sabbir, A.~S.} \& \bibinfo{author}{Tavakkoli, A.}
+\newblock \bibinfo{title}{{Optic-Net: A Novel Convolutional Neural Network for
+  Diagnosis of Retinal Diseases from Optical Tomography Images}}.
+\newblock In \emph{\bibinfo{booktitle}{2019 18th IEEE International Conference
+  On Machine Learning And Applications (ICMLA)}}, \bibinfo{pages}{964--971}
+  (\bibinfo{organization}{IEEE}, \bibinfo{year}{2019}).
+
+\bibitem{thomas2021novel}
+\bibinfo{author}{Thomas, A.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A novel multiscale and multipath
+  convolutional neural network based age-related macular degeneration detection
+  using {OCT} images}}.
+\newblock {\emph{\JournalTitle{Computer Methods and Programs in Biomedicine}}}
+  \textbf{\bibinfo{volume}{209}}, \bibinfo{pages}{106294}
+  (\bibinfo{year}{2021}).
+
+\bibitem{bussola2021ai}
+\bibinfo{author}{Bussola, N.}, \bibinfo{author}{Marcolini, A.},
+  \bibinfo{author}{Maggio, V.}, \bibinfo{author}{Jurman, G.} \&
+  \bibinfo{author}{Furlanello, C.}
+\newblock \bibinfo{title}{{AI} slipping on tiles: {Data leakage in digital
+  pathology}}.
+\newblock In \emph{\bibinfo{booktitle}{International Conference on Pattern
+  Recognition}}, \bibinfo{pages}{167--182} (\bibinfo{organization}{Springer},
+  \bibinfo{year}{2021}).
+
+\bibitem{najeeb2018classification}
+\bibinfo{author}{Najeeb, S.} \emph{et~al.}
+\newblock \bibinfo{title}{Classification of retinal diseases from {OCT} scans
+  using convolutional neural networks}.
+\newblock In \emph{\bibinfo{booktitle}{2018 10th International Conference on
+  Electrical and Computer Engineering (ICECE)}}, \bibinfo{pages}{465--468}
+  (\bibinfo{organization}{IEEE}, \bibinfo{year}{2018}).
+
+\bibitem{chen2021classification}
+\bibinfo{author}{Chen, Y.-M.}, \bibinfo{author}{Huang, W.-T.},
+  \bibinfo{author}{Ho, W.-H.} \& \bibinfo{author}{Tsai, J.-T.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Classification of age-related
+  macular degeneration using convolutional-neural-network-based transfer
+  learning}}.
+\newblock {\emph{\JournalTitle{BMC bioinformatics}}}
+  \textbf{\bibinfo{volume}{22}}, \bibinfo{pages}{1--16} (\bibinfo{year}{2021}).
+
+\bibitem{latha2021automated}
+\bibinfo{author}{Latha, V.}, \bibinfo{author}{Ashok, L.} \&
+  \bibinfo{author}{Sreeni, K.}
+\newblock \bibinfo{title}{{Automated Macular Disease Detection using Retinal
+  Optical Coherence Tomography images by Fusion of Deep Learning Networks}}.
+\newblock In \emph{\bibinfo{booktitle}{2021 National Conference on
+  Communications (NCC)}}, \bibinfo{pages}{1--6} (\bibinfo{organization}{IEEE},
+  \bibinfo{year}{2021}).
+
+\bibitem{tsuji2020classification}
+\bibinfo{author}{Tsuji, T.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Classification of optical coherence
+  tomography images using a capsule network}}.
+\newblock {\emph{\JournalTitle{BMC ophthalmology}}}
+  \textbf{\bibinfo{volume}{20}}, \bibinfo{pages}{1--9} (\bibinfo{year}{2020}).
+
+\bibitem{srinivasan2014fully}
+\bibinfo{author}{Srinivasan, P.~P.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Fully automated detection of
+  diabetic macular edema and dry age-related macular degeneration from optical
+  coherence tomography images}}.
+\newblock {\emph{\JournalTitle{Biomedical optics express}}}
+  \textbf{\bibinfo{volume}{5}}, \bibinfo{pages}{3568--3577}
+  (\bibinfo{year}{2014}).
+
+\bibitem{athanasiou2019deep}
+\bibinfo{author}{Athanasiou, L.~S.}, \bibinfo{author}{Olender, M.~L.},
+  \bibinfo{author}{Jos{\'e}, M.}, \bibinfo{author}{Ben-Assa, E.} \&
+  \bibinfo{author}{Edelman, E.~R.}
+\newblock \bibinfo{title}{A deep learning approach to classify atherosclerosis
+  using intracoronary optical coherence tomography}.
+\newblock In \emph{\bibinfo{booktitle}{Medical Imaging 2019: Computer-Aided
+  Diagnosis}}, vol. \bibinfo{volume}{10950}, \bibinfo{pages}{163--170}
+  (\bibinfo{organization}{SPIE}, \bibinfo{year}{2019}).
+
+\bibitem{wang2021deep}
+\bibinfo{author}{Wang, C.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Deep-learning-aided forward optical
+  coherence tomography endoscope for percutaneous nephrostomy guidance}}.
+\newblock {\emph{\JournalTitle{Biomedical optics express}}}
+  \textbf{\bibinfo{volume}{12}}, \bibinfo{pages}{2404--2418}
+  (\bibinfo{year}{2021}).
+
+\bibitem{gesperger2020improved}
+\bibinfo{author}{Gesperger, J.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Improved diagnostic imaging of
+  brain tumors by multimodal microscopy and deep learning}}.
+\newblock {\emph{\JournalTitle{Cancers}}} \textbf{\bibinfo{volume}{12}},
+  \bibinfo{pages}{1806} (\bibinfo{year}{2020}).
+
+\bibitem{saratxaga2021characterization}
+\bibinfo{author}{Saratxaga, C.~L.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{Characterization of Optical
+  Coherence Tomography Images for Colon Lesion Differentiation under Deep
+  Learning}}}.
+\newblock {\emph{\JournalTitle{Applied Sciences}}}
+  \textbf{\bibinfo{volume}{11}}, \bibinfo{pages}{3119} (\bibinfo{year}{2021}).
+
+\bibitem{singla2019automated}
+\bibinfo{author}{Singla, N.}, \bibinfo{author}{Dubey, K.} \&
+  \bibinfo{author}{Srivastava, V.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Automated assessment of breast
+  cancer margin in optical coherence tomography images via pretrained
+  convolutional neural network}}.
+\newblock {\emph{\JournalTitle{Journal of biophotonics}}}
+  \textbf{\bibinfo{volume}{12}}, \bibinfo{pages}{e201800255}
+  (\bibinfo{year}{2019}).
+
+\bibitem{chetoui2020deep}
+\bibinfo{author}{Chetoui, M.} \& \bibinfo{author}{Akhloufi, M.~A.}
+\newblock \bibinfo{title}{Deep retinal diseases detection and explainability
+  using {OCT} images}.
+\newblock In \emph{\bibinfo{booktitle}{International Conference on Image
+  Analysis and Recognition}}, \bibinfo{pages}{358--366}
+  (\bibinfo{organization}{Springer}, \bibinfo{year}{2020}).
+
+\bibitem{rasti2017macular}
+\bibinfo{author}{Rasti, R.}, \bibinfo{author}{Rabbani, H.},
+  \bibinfo{author}{Mehridehnavi, A.} \& \bibinfo{author}{Hajizadeh, F.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Macular {OCT} classification using
+  a multi-scale convolutional neural network ensemble}}.
+\newblock {\emph{\JournalTitle{IEEE transactions on medical imaging}}}
+  \textbf{\bibinfo{volume}{37}}, \bibinfo{pages}{1024--1034}
+  (\bibinfo{year}{2017}).
+
+\bibitem{farsiu2014quantitative}
+\bibinfo{author}{Farsiu, S.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Quantitative classification of eyes
+  with and without intermediate age-related macular degeneration using optical
+  coherence tomography}}.
+\newblock {\emph{\JournalTitle{Ophthalmology}}} \textbf{\bibinfo{volume}{121}},
+  \bibinfo{pages}{162--172} (\bibinfo{year}{2014}).
+
+\bibitem{karimian2018deep}
+\bibinfo{author}{Karimian, N.}, \bibinfo{author}{Salehi, H.~S.},
+  \bibinfo{author}{Mahdian, M.}, \bibinfo{author}{Alnajjar, H.} \&
+  \bibinfo{author}{Tadinada, A.}
+\newblock \bibinfo{title}{Deep learning classifier with optical coherence
+  tomography images for early dental caries detection}.
+\newblock In \emph{\bibinfo{booktitle}{Lasers in Dentistry XXIV}}, vol.
+  \bibinfo{volume}{10473}, \bibinfo{pages}{1047304}
+  (\bibinfo{organization}{International Society for Optics and Photonics},
+  \bibinfo{year}{2018}).
+
+\bibitem{wang2020oct}
+\bibinfo{author}{Wang, R.} \emph{et~al.}
+\newblock \bibinfo{title}{{OCT} image quality evaluation based on deep and
+  shallow features fusion network}.
+\newblock In \emph{\bibinfo{booktitle}{2020 IEEE 17th International Symposium
+  on Biomedical Imaging (ISBI)}}, \bibinfo{pages}{1561--1564}
+  (\bibinfo{organization}{IEEE}, \bibinfo{year}{2020}).
+
+\bibitem{kermany2018identifying}
+\bibinfo{author}{Kermany, D.~S.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Identifying medical diagnoses and
+  treatable diseases by image-based deep learning}}.
+\newblock {\emph{\JournalTitle{Cell}}} \textbf{\bibinfo{volume}{172}},
+  \bibinfo{pages}{1122--1131} (\bibinfo{year}{2018}).
+
+\bibitem{sokolova2009systematic}
+\bibinfo{author}{Sokolova, M.} \& \bibinfo{author}{Lapalme, G.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A systematic analysis of
+  performance measures for classification tasks}}.
+\newblock {\emph{\JournalTitle{Information processing \& management}}}
+  \textbf{\bibinfo{volume}{45}}, \bibinfo{pages}{427--437}
+  (\bibinfo{year}{2009}).
+
+\end{thebibliography}
