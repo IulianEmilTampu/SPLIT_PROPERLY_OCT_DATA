@@ -103,7 +103,10 @@ with open(os.path.join(model_path,'config.json')) as json_file:
     # make sure that the files point to this system dataset
     # fix names based on the given dataset path
     if any([config['dataset_type'] == 'retinal', config['dataset_type'] == 'Kermany']):
-        idx =  3
+        if config['dataset_split_strategy'] == 'original':
+            idx = 4
+        else:
+            idx =  3
     elif config['dataset_type'] == 'AIIMS':
         idx =  4
     elif config['dataset_type'] == 'Srinivas':

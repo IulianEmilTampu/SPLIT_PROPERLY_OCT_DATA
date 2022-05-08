@@ -241,6 +241,8 @@ elif all([any([dataset_type == 'retinal', dataset_type == 'Kermany']), dataset_s
     # get the number of classes
     unique_labels = [os.path.basename(f) for f in glob.glob(os.path.join(dataset_folder, 'train','*'))]
     nClasses =len(unique_labels)
+    input_size = [240, 400]
+    n_channels = 1
 else:
     raise ValueError(f'The given dataset split strategy is not valid. Expected per_image, per_volume or original (original only for retinal dataset). Give {dataset_split_strategy} for dataset type {dataset_type}')
 
