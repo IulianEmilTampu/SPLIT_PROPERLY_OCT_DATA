@@ -33,7 +33,7 @@
 \citation{butola2019volumetric}
 \citation{kermany2018large}
 \babel@aux{english}{}
-\citation{butola2019volumetric,kermany2018large}
+\citation{butola2019volumetric,kermany2018large,srinivasan2014fully}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Schematic of an OCT volume with examples of consecutive slices (\textit  {b-scans}) from the three open-access OCT datasets used in this study. (a) pictures the consecutive 2D \textit  {b-scans} rendering a 3D OCT volume. Here an example from the AIIMS dataset \cite  {butola2019volumetric} is used for illustrative purposes. In (b) the consecutive \textit  {b-scans} separated by $\sim $18 micrometers are examples of healthy breast tissue (Patient 15, volume 0046, slices 0075 and 0076) from the AIIMS dataset \cite  {butola2019volumetric}. (c) shows consecutive images of retina affected by choroidal neovascularization (CNV 81630-33 and 81630-34) from the Kermany’s OCT2017 dataset \cite  {kermany2018large}. (d) images of age-related macular degeneration (AMD) from Srinivas dataset (AMD2 046 and 047). Note that the \textit  {b-scans} from both Kermany’s and Srinivas' dataset are given with data augmentation applied.\relax }}{2}{figure.caption.1}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:introduction_1}{{1}{2}{Schematic of an OCT volume with examples of consecutive slices (\textit {b-scans}) from the three open-access OCT datasets used in this study. (a) pictures the consecutive 2D \textit {b-scans} rendering a 3D OCT volume. Here an example from the AIIMS dataset \cite {butola2019volumetric} is used for illustrative purposes. In (b) the consecutive \textit {b-scans} separated by $\sim $18 micrometers are examples of healthy breast tissue (Patient 15, volume 0046, slices 0075 and 0076) from the AIIMS dataset \cite {butola2019volumetric}. (c) shows consecutive images of retina affected by choroidal neovascularization (CNV 81630-33 and 81630-34) from the Kermany’s OCT2017 dataset \cite {kermany2018large}. (d) images of age-related macular degeneration (AMD) from Srinivas dataset (AMD2 046 and 047). Note that the \textit {b-scans} from both Kermany’s and Srinivas' dataset are given with data augmentation applied.\relax }{figure.caption.1}{}}
@@ -54,8 +54,6 @@
 \citation{butola2020deep}
 \citation{srinivasan2014fully}
 \citation{butola2020deep}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Comparison between Matthews correlation coefficient comparison for LightOCT model trained on different dataset split strategies. In (a) the results with each sample having the correct label, whereas in (b) the results from the random bales experiment. For both (a) and (b) each box plot summarise the test MCC for the 50 models trained through a ten repeated five-fold cross validation. Results are presented for all the three datasets with the \textit  {per-image} split strategy shown in striped-green and \textit  {per-volume/subject} split strategy in dotted-orange. For Kermany's dataset, the result of the models trained on the original split is shown as full-black circle. \texthl  {Figure b needs to include the results from Kermany's trainings}\relax }}{3}{figure.caption.3}\protected@file@percent }
-\newlabel{fig:results_1}{{2}{3}{Comparison between Matthews correlation coefficient comparison for LightOCT model trained on different dataset split strategies. In (a) the results with each sample having the correct label, whereas in (b) the results from the random bales experiment. For both (a) and (b) each box plot summarise the test MCC for the 50 models trained through a ten repeated five-fold cross validation. Results are presented for all the three datasets with the \textit {per-image} split strategy shown in striped-green and \textit {per-volume/subject} split strategy in dotted-orange. For Kermany's dataset, the result of the models trained on the original split is shown as full-black circle. \hl {Figure b needs to include the results from Kermany's trainings}\relax }{figure.caption.3}{}}
 \citation{butola2020deep,kamran2019optic,thomas2021novel}
 \citation{yagis2021effect}
 \citation{bussola2021ai}
@@ -91,24 +89,26 @@
 \citation{kermany2018large}
 \citation{karimian2018deep}
 \citation{wang2020oct}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces LightOCT model performance on Kermany’s \cite  {kermany2018large}, AIIMS \cite  {butola2019volumetric} and Srinivas \cite  {srinivasan2014fully} datasets with training, validation and testing sets split using different strategies. Performance metrics are reported as mean$\pm $standard deviation (mean$\pm $std) over the models trained through the ten repeated five-fold cross validation and classes. \relax }}{4}{table.caption.2}\protected@file@percent }
-\newlabel{tab:results_1}{{1}{4}{LightOCT model performance on Kermany’s \cite {kermany2018large}, AIIMS \cite {butola2019volumetric} and Srinivas \cite {srinivasan2014fully} datasets with training, validation and testing sets split using different strategies. Performance metrics are reported as mean$\pm $standard deviation (mean$\pm $std) over the models trained through the ten repeated five-fold cross validation and classes. \relax }{table.caption.2}{}}
 \citation{kermany2018large,kermany2018identifying}
 \citation{kermany2018large}
 \citation{kermany2018large}
-\citation{chetoui2020deep}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces  Summary of reviewed literature with focus on dataset split and reported test classification performance. Open-access datasets and the ones available upon request are marked by $^\ast $ and $^{\ast \ast }$, respectively. Dataset is not open-access if not specified. Datasets obtained from animal model samples are marked by $^\dagger $. The difference in performance between studies using the same datasets results from the different implemented methods.\relax }}{5}{table.caption.4}\protected@file@percent }
-\newlabel{tab:discussion_1}{{2}{5}{Summary of reviewed literature with focus on dataset split and reported test classification performance. Open-access datasets and the ones available upon request are marked by $^\ast $ and $^{\ast \ast }$, respectively. Dataset is not open-access if not specified. Datasets obtained from animal model samples are marked by $^\dagger $. The difference in performance between studies using the same datasets results from the different implemented methods.\relax }{table.caption.4}{}}
 \citation{srinivasan2014fully}
 \citation{butola2019volumetric}
+\citation{chetoui2020deep}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces LightOCT model performance on Kermany’s \cite  {kermany2018large}, AIIMS \cite  {butola2019volumetric} and Srinivas \cite  {srinivasan2014fully} datasets with training, validation and testing sets split using different strategies. Performance metrics are reported as mean$\pm $standard deviation (mean$\pm $std) over the models trained through the ten times repeated five-fold cross validation and classes. \relax }}{4}{table.caption.2}\protected@file@percent }
+\newlabel{tab:results_1}{{1}{4}{LightOCT model performance on Kermany’s \cite {kermany2018large}, AIIMS \cite {butola2019volumetric} and Srinivas \cite {srinivasan2014fully} datasets with training, validation and testing sets split using different strategies. Performance metrics are reported as mean$\pm $standard deviation (mean$\pm $std) over the models trained through the ten times repeated five-fold cross validation and classes. \relax }{table.caption.2}{}}
 \citation{butola2020deep}
 \citation{butola2020deep}
 \citation{butola2020deep}
 \citation{butola2020deep}
 \citation{jurman2012comparison}
 \citation{sokolova2009systematic}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Comparison between Matthews correlation coefficient comparison for LightOCT model trained on different dataset split strategies. In (a) the results with each sample having the correct label, whereas in (b) the results from the random label experiment. For both (a) and (b) each box plot summarise the test MCC for the 50 models trained through a ten times repeated five-fold cross validation. Results are presented for all the three datasets with the \textit  {per-image} split strategy shown in striped-green and \textit  {per-volume/subject} split strategy in dotted-orange. For Kermany's dataset, the result of the models trained on the \textit  {original} split is shown as full-black circle. \texthl  {Figure b needs to include the results from Kermany's trainings}\relax }}{5}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:results_1}{{2}{5}{Comparison between Matthews correlation coefficient comparison for LightOCT model trained on different dataset split strategies. In (a) the results with each sample having the correct label, whereas in (b) the results from the random label experiment. For both (a) and (b) each box plot summarise the test MCC for the 50 models trained through a ten times repeated five-fold cross validation. Results are presented for all the three datasets with the \textit {per-image} split strategy shown in striped-green and \textit {per-volume/subject} split strategy in dotted-orange. For Kermany's dataset, the result of the models trained on the \textit {original} split is shown as full-black circle. \hl {Figure b needs to include the results from Kermany's trainings}\relax }{figure.caption.3}{}}
 \citation{butola2019volumetric}
 \citation{kermany2018large}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces  Summary of reviewed literature with focus on dataset split and reported test classification performance. Open-access datasets and the ones available upon request are marked by $^\ast $ and $^{\ast \ast }$, respectively. Dataset is not open-access if not specified. Datasets obtained from animal model samples are marked by $^\dagger $. The difference in performance between studies using the same datasets results from the different implemented methods.\relax }}{6}{table.caption.4}\protected@file@percent }
+\newlabel{tab:discussion_1}{{2}{6}{Summary of reviewed literature with focus on dataset split and reported test classification performance. Open-access datasets and the ones available upon request are marked by $^\ast $ and $^{\ast \ast }$, respectively. Dataset is not open-access if not specified. Datasets obtained from animal model samples are marked by $^\dagger $. The difference in performance between studies using the same datasets results from the different implemented methods.\relax }{table.caption.4}{}}
 \bibdata{references}
 \bibcite{xu2018splitting}{1}
 \bibcite{kuhn2013applied}{2}
@@ -129,9 +129,9 @@
 \bibcite{kamran2019optic}{17}
 \bibcite{thomas2021novel}{18}
 \bibcite{bussola2021ai}{19}
+\@writefile{toc}{\contentsline {section}{\hspace  *{-\tocsep }References}{7}{table.caption.4}\protected@file@percent }
 \bibcite{najeeb2018classification}{20}
 \bibcite{chen2021classification}{21}
-\@writefile{toc}{\contentsline {section}{\hspace  *{-\tocsep }References}{7}{table.caption.4}\protected@file@percent }
 \bibcite{latha2021automated}{22}
 \bibcite{tsuji2020classification}{23}
 \bibcite{srinivasan2014fully}{24}
