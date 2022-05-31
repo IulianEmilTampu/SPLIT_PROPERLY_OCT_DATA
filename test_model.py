@@ -111,7 +111,7 @@ with open(os.path.join(model_path,'config.json')) as json_file:
         idx =  4
     elif config['dataset_type'] == 'Srinivas':
         idx =  5
-    
+
     test_img= []
     # build file names to point to this given dataset
     for f in config['test']:
@@ -128,13 +128,21 @@ elif config['dataset_type'] == 'Srinivas':
     data_gen = utilities.Srinivas_data_gen
 
 
+# test_dataset =  data_gen(test_img,
+#                         unique_labels=config['unique_labels'],
+#                         batch_size=16,
+#                         training=False,
+#                         channels=config['n_channels'],
+#                         input_size=config['input_size'],
+#                         random_label_experiment=config['random_label_experiment'],
+#                         random_label_experiment_seed=291209)
 test_dataset =  data_gen(test_img,
                         unique_labels=config['unique_labels'],
                         batch_size=16,
                         training=False,
                         channels=config['n_channels'],
                         input_size=config['input_size'],
-                        random_label_experiment=config['random_label_experiment'],
+                        random_label_experiment=False,
                         random_label_experiment_seed=291209)
 
 ## perform testing for each fold the model was trained on
@@ -212,7 +220,7 @@ print(f'Saving information...')
 test_summary = OrderedDict()
 
 # for backwards compatibility
-if config['number_crossvalidation_repetitions']:
+if "number_crossvalidation_repetitions" in config.keys():
     n_cv = config['N_FOLDS']*config['number_crossvalidation_repetitions']
 else:
     n_cv = config['N_FOLDS']
