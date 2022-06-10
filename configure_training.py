@@ -35,87 +35,87 @@ from sklearn.model_selection import KFold, RepeatedKFold
 
 ## parse inline parameters
 
-# parser = argparse.ArgumentParser(description='Script that configures a cross-validation training for OCT 2D image classification.')
-# parser.add_argument('-wd','--working_directory' ,required=False, help='Provide the Working Directory where the models_tf.py, utilities.py and utilities_models_tf.py files are. This folder will also be the one where the trained models will be saved. If not provided, the current working directory is used', default=os.getcwd())
-# # dataset parameters
-# parser.add_argument('-df', '--dataset_folder', required=True, help='Provide the Dataset Folder where the downloaded dataset are located. Note that for the OCT2017 dataset in case of per_image or per_volume split strategy, the images should be first reorganized using the refine_dataset.py script. Give the original dataset path in case the original_split strategy is set.')
-# parser.add_argument('-dt', '--dataset_type', required=True, help='Specifies which dataset (Kermany, AIIMS, Srinivas) is given for training. This will be used to set the appropriate dataloader function')
-# parser.add_argument('-dss', '--dataset_split_strategy', required=False, help='Specifies the strategy used to split the detaset into training testing and validation. Three options available per_volume, per_image (innapropriate splitting) or original (only OCT2017)', default='per_volume')
-# parser.add_argument('-ids', '--imbalance_data_strategy', required=False, help='Strategy to use to tackle imbalance data. Available none or weights', default='weights')
-# parser.add_argument('-ntspc', '--number_test_images_per_class', required=False, help='(int) Number of test images to select from each class. For AIIMS and Kermany datasets this should be set to 1000. For Srinivas dataset to 250 given the limited number of dataset images.', default=1000)
-# # model parameters and training parameters
-# parser.add_argument('-mc', '--model_configuration', required=False, help='Provide the Model Configuration (LightOCT or others if implemented in the models_tf.py file).', default='LightOCT')
-# parser.add_argument('-mn', '--model_name', required=False, help='Provide the Model Name. This will be used to create the folder where to save the model. If not provided, the current datetime will be used', default=datetime.now().strftime("%H:%M:%S"))
-# parser.add_argument('-f', '--folds', required=False, help='Number of folds. Default is 3', default='3')
-# parser.add_argument('-nkf', '--nbr_kross_validation_repetition', required=False, help='Number of times the cross validation procedure should be repeated', default=1)
-# parser.add_argument('-l', '--loss', required=False, help='Loss to use to train the model (cce or wcce). Default is cce', default='cce')
-# parser.add_argument('-lr', '--learning_rate', required=False, help='Learning rate.', default=0.001)
-# parser.add_argument('-bs', '--batch_size', required=False, help='Batch size.', default=50)
-# parser.add_argument('-ks', '--kernel_size', nargs='+', required=False, help='Encoder conv kernel size.', default=(5,5))
-# parser.add_argument('-augment', '--augmentation', required=False, help='Specify if data augmentation is to be performed (True) or not (False)', default=True)
-# parser.add_argument('-rle', '--random_label_experiment', required=False, help='Boolean specifying if the random experiment (random shuffling of the labels) is to be run.', default=False)
-# # debug parametres
-# parser.add_argument('-v', '--verbose',required=False, help='How much to information to print while training: 0 = none, 1 = at the end of an epoch, 2 = detailed progression withing the epoch.', default=0.1)
-# parser.add_argument('-ctd', '--check_training', required=False, help='If True, checks that none of the test images is in the training/validation set. This may take a while depending on the size of the dataset.', default=True)
-# parser.add_argument('-db', '--debug', required=False, help='True if want to use a smaller portion of the dataset for debugging', default=False)
-#
-# args = parser.parse_args()
-#
-# # # # # # # # # # # # # # # # parse variables
-# working_folder = args.working_directory
-# # dataset variables
-# dataset_folder = args.dataset_folder
-# dataset_type = args.dataset_type
-# dataset_split_strategy = args.dataset_split_strategy
-# imbalance_data_strategy = args.imbalance_data_strategy
-# number_test_images_per_class = int(args.number_test_images_per_class)
-# # model parameters
-# model_configuration = args.model_configuration
-# model_save_name = args.model_name
-# loss = args.loss
-# learning_rate = float(args.learning_rate)
-# batch_size = int(args.batch_size)
-# data_augmentation = args.augmentation
-# N_FOLDS = int(args.folds)
-# nbr_kross_validation_repetition=int(args.nbr_kross_validation_repetition)
-# kernel_size = [int(i) for i in args.kernel_size]
-# # experiment variables
-# random_label_experiment = args.random_label_experiment == 'True'
-# # debug variables
-# verbose = int(args.verbose)
-# debug = args.debug == 'True'
-# check_training = args.check_training == 'True'
+parser = argparse.ArgumentParser(description='Script that configures a cross-validation training for OCT 2D image classification.')
+parser.add_argument('-wd','--working_directory' ,required=False, help='Provide the Working Directory where the models_tf.py, utilities.py and utilities_models_tf.py files are. This folder will also be the one where the trained models will be saved. If not provided, the current working directory is used', default=os.getcwd())
+# dataset parameters
+parser.add_argument('-df', '--dataset_folder', required=True, help='Provide the Dataset Folder where the downloaded dataset are located. Note that for the OCT2017 dataset in case of per_image or per_volume split strategy, the images should be first reorganized using the refine_dataset.py script. Give the original dataset path in case the original_split strategy is set.')
+parser.add_argument('-dt', '--dataset_type', required=True, help='Specifies which dataset (Kermany, AIIMS, Srinivas) is given for training. This will be used to set the appropriate dataloader function')
+parser.add_argument('-dss', '--dataset_split_strategy', required=False, help='Specifies the strategy used to split the detaset into training testing and validation. Three options available per_volume, per_image (innapropriate splitting) or original (only OCT2017)', default='per_volume')
+parser.add_argument('-ids', '--imbalance_data_strategy', required=False, help='Strategy to use to tackle imbalance data. Available none or weights', default='weights')
+parser.add_argument('-ntspc', '--number_test_images_per_class', required=False, help='(int) Number of test images to select from each class. For AIIMS and Kermany datasets this should be set to 1000. For Srinivas dataset to 250 given the limited number of dataset images.', default=1000)
+# model parameters and training parameters
+parser.add_argument('-mc', '--model_configuration', required=False, help='Provide the Model Configuration (LightOCT or others if implemented in the models_tf.py file).', default='LightOCT')
+parser.add_argument('-mn', '--model_name', required=False, help='Provide the Model Name. This will be used to create the folder where to save the model. If not provided, the current datetime will be used', default=datetime.now().strftime("%H:%M:%S"))
+parser.add_argument('-f', '--folds', required=False, help='Number of folds. Default is 3', default='3')
+parser.add_argument('-nkf', '--nbr_kross_validation_repetition', required=False, help='Number of times the cross validation procedure should be repeated', default=1)
+parser.add_argument('-l', '--loss', required=False, help='Loss to use to train the model (cce or wcce). Default is cce', default='cce')
+parser.add_argument('-lr', '--learning_rate', required=False, help='Learning rate.', default=0.001)
+parser.add_argument('-bs', '--batch_size', required=False, help='Batch size.', default=50)
+parser.add_argument('-ks', '--kernel_size', nargs='+', required=False, help='Encoder conv kernel size.', default=(5,5))
+parser.add_argument('-augment', '--augmentation', required=False, help='Specify if data augmentation is to be performed (True) or not (False)', default=True)
+parser.add_argument('-rle', '--random_label_experiment', required=False, help='Boolean specifying if the random experiment (random shuffling of the labels) is to be run.', default=False)
+# debug parametres
+parser.add_argument('-v', '--verbose',required=False, help='How much to information to print while training: 0 = none, 1 = at the end of an epoch, 2 = detailed progression withing the epoch.', default=0.1)
+parser.add_argument('-ctd', '--check_training', required=False, help='If True, checks that none of the test images is in the training/validation set. This may take a while depending on the size of the dataset.', default=True)
+parser.add_argument('-db', '--debug', required=False, help='True if want to use a smaller portion of the dataset for debugging', default=False)
 
+args = parser.parse_args()
 
-# # # # # # # # # #  parse variables
-working_folder = "/flush/iulta54/Research/P3_OCT_SPLIT_PROPERLY_YOUR_DATA"
+# # # # # # # # # # # # # # # parse variables
+working_folder = args.working_directory
 # dataset variables
-# # # # Original retinal dataset
-dataset_folder = "/flush/iulta54/Research/Data/OCT/Retinal/Zhang_dataset_version_3/OCT"
-# # # # per-class retinal dataset
-# dataset_folder = "/flush/iulta54/Research/Data/OCT/Retinal/Zhang_dataset_version_3/per_class_files"
-# # # # AIIMS dataset
-# dataset_folder = "/flush/iulta54/Research/Data/OCT/AIIMS_Dataset/original"
-dataset_type = 'Kermany'
-dataset_split_strategy = 'original'
-imbalance_data_strategy = 'none'
-number_test_images_per_class = 1000
+dataset_folder = args.dataset_folder
+dataset_type = args.dataset_type
+dataset_split_strategy = args.dataset_split_strategy
+imbalance_data_strategy = args.imbalance_data_strategy
+number_test_images_per_class = int(args.number_test_images_per_class)
 # model parameters
-model_configuration = 'LightOCT'
-model_save_name = f'TEST_{model_configuration}_dataset_{dataset_type}_{dataset_split_strategy}'
-loss = 'cce'
-learning_rate = 0.001
-batch_size = 256
-data_augmentation = True
-N_FOLDS = 5
-nbr_kross_validation_repetition=2
-kernel_size = (3,3)
-# # experiment variables
-random_label_experiment = False
+model_configuration = args.model_configuration
+model_save_name = args.model_name
+loss = args.loss
+learning_rate = float(args.learning_rate)
+batch_size = int(args.batch_size)
+data_augmentation = args.augmentation
+N_FOLDS = int(args.folds)
+nbr_kross_validation_repetition=int(args.nbr_kross_validation_repetition)
+kernel_size = [int(i) for i in args.kernel_size]
+# experiment variables
+random_label_experiment = args.random_label_experiment == 'True'
 # debug variables
-verbose = 2
-debug = False
-check_training = False
+verbose = int(args.verbose)
+debug = args.debug == 'True'
+check_training = args.check_training == 'True'
+
+
+# # # # # # # # # # #  parse variables
+# working_folder = "/flush/iulta54/Research/P3_OCT_SPLIT_PROPERLY_YOUR_DATA"
+# # dataset variables
+# # # # # Original retinal dataset
+# dataset_folder = "/flush/iulta54/Research/Data/OCT/Retinal/Zhang_dataset_version_3/OCT"
+# # # # # per-class retinal dataset
+# # dataset_folder = "/flush/iulta54/Research/Data/OCT/Retinal/Zhang_dataset_version_3/per_class_files"
+# # # # # AIIMS dataset
+# # dataset_folder = "/flush/iulta54/Research/Data/OCT/AIIMS_Dataset/original"
+# dataset_type = 'Kermany'
+# dataset_split_strategy = 'original'
+# imbalance_data_strategy = 'none'
+# number_test_images_per_class = 1000
+# # model parameters
+# model_configuration = 'LightOCT'
+# model_save_name = f'TEST_{model_configuration}_dataset_{dataset_type}_{dataset_split_strategy}'
+# loss = 'cce'
+# learning_rate = 0.001
+# batch_size = 256
+# data_augmentation = True
+# N_FOLDS = 5
+# nbr_kross_validation_repetition=2
+# kernel_size = (3,3)
+# # # experiment variables
+# random_label_experiment = False
+# # debug variables
+# verbose = 2
+# debug = False
+# check_training = False
 
 # check if working folder and dataset folder exist
 if os.path.isdir(working_folder):
