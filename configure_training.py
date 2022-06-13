@@ -243,6 +243,7 @@ elif all([any([dataset_type == 'retinal', dataset_type == 'Kermany']), dataset_s
         rkf = RepeatedKFold(n_splits=N_FOLDS,
                             n_repeats=nbr_kross_validation_repetition,
                             random_state=2652124)
+        random.shuffle(training_files)
         for tr_idx, val_idx in rkf.split(training_files):
                 per_fold_train_files.append([training_files[i] for i in tr_idx])
                 per_fold_val_files.append([training_files[i] for i in val_idx])
