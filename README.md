@@ -44,7 +44,7 @@ Kermany's retinal dataset is available at https://data.mendeley.com/datasets/rsc
 The dataset comes with the train and test splits already organized. This version of the dataset is called *original dataset*. To obtain a version of the dataset split per class, use the **refine_dataset.py** script, where the location of the original dataset can be specified using the variable dataset_folder and the location of where to save the reorganized dataset by destination_folder. These two variables are specified within the refine_dataset.py 
 
 ### Srinivasan’s retinal dataset
-Srinivasan’s retinal dataset is available at https://people.duke.edu/~sf59/Srinivasan_BOE_2014_dataset.html.
+Srinivasan’s retinal dataset is available at https://people.duke.edu/~sf59/Srinivasan_BOE_2014_dataset.htm.
 This dataset is ready to use since the images are saved per class (age-related macular degeneration (AMD), diabetic macular edema (DME), and normal subjects) and per subject. 
 
 ## Code structure
