@@ -6,6 +6,8 @@ This repository contains the code used to train a shallow CNN model (LightOCT) [
 
 **Abstract**
 
+In the application of deep learning on optical coherence tomography (OCT) data, it is common to train classification networks using 2D images originating from volumetric data. Given the micrometer resolution of OCT systems, consecutive images are often very similar in both visible structures and noise. Thus, an inappropriate data split can result in overlap between the training and testing sets, with a large portion of the literature overlooking this aspect. In this study, the effect of improper dataset splitting on model evaluation is demonstrated for three classification tasks using three OCT open-access datasets extensively used, Kermany’s and Srinivasan’s ophthalmology datasets, and AIIMS breast tissue dataset. Results show that the classification performance is inflated by 0.07 up to 0.43 in terms of Matthews Correlation Coefficient (accuracy: 5% to 30%) for models tested on datasets with improper splitting, highlighting the considerable effect of dataset handling on model evaluation. This study intends to raise awareness on the importance of dataset splitting given the increased research interest in implementing deep learning on OCT data.
+
 
 **Key highlights:**
 - **Data leakage** between training and test sets can originate when using 2D images extracted from 3D data and disregarding the relation that exists between images from the same volume.  
