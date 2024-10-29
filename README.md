@@ -15,18 +15,18 @@ In the application of deep learning on optical coherence tomography (OCT) data, 
 - **Importance**: Highlights the need for careful dataset handling to ensure accurate and reliable model evaluation.
 
 ## Table of Contents
-- [Prerequisites and setup](#setup)
+- [Prerequisites and setup](#Prerequisites-and-setup)
 - [Datasets](#datasets)
 - [Code Structure](#code-structure)
 - [Usage](#usage)
 - [Reference](#reference)
 - [License](#license)
 
-### Prerequisites and setup
+## Prerequisites and setup
 A computer with GPU and relative drivers installed.
 Anaconda or Miniconda Python environment manager.
 
-## Setup
+### Setup
 1. Clone the repo to your local machine
 ```sh
 git clone git@github.com:IulianEmilTampu/OCT_SPLIT_PROPERLY_YOUR_DATA.git
