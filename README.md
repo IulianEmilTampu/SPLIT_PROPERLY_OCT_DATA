@@ -14,6 +14,7 @@ This repository contains the code used to train a shallow CNN model (LightOCT) [
 
 ## Table of Contents
 - [Prerequisites and setup](#setup)
+- [Datasets](#datasets)
 - [Code Structure](#code-structure)
 - [Usage](#usage)
 - [Reference](#reference)
@@ -33,19 +34,34 @@ git clone git@github.com:IulianEmilTampu/OCT_SPLIT_PROPERLY_YOUR_DATA.git
    conda env create -f environment_setup.yml
    ```
 
-
-
-
-## Dataset preparation
+## Datasets
 ### AIIMS dataset
 The AIIMS dataset is available at https://www.bioailab.org/datasets [2]. 
 This dataset is ready to use since the images are saved per class (Healthy or Cancer) and per subject.
 
-### Retinal dataset
-The retinal dataset is available at https://data.mendeley.com/datasets/rscbjbr9sj [3, 4]
+### Kermany's retinal dataset
+Kermany's retinal dataset is available at https://data.mendeley.com/datasets/rscbjbr9sj [3, 4]
 The dataset comes with the train and test splits already organized. This version of the dataset is called *original dataset*. To obtain a version of the dataset split per class, use the **refine_dataset.py** script, where the location of the original dataset can be specified using the variable dataset_folder and the location of where to save the reorganized dataset by destination_folder. These two variables are specified within the refine_dataset.py 
 
-<!-- USAGE EXAMPLES -->
+### Srinivasan’s retinal dataset
+Srinivasan’s retinal dataset is available at https://people.duke.edu/~sf59/Srinivasan_BOE_2014_dataset.html.
+This dataset is ready to use since the images are saved per class (age-related macular degeneration (AMD), diabetic macular edema (DME), and normal subjects) and per subject. 
+
+## Code structure
+The repository is organized as follows:
+
+- **Data Preparation**:
+  - `refine_dataset.py`: Script to re-organize and splits per class Kermany's dataset. 
+- **Model Training and Evaluation**:
+  - `configure_training.py`: Script generates the configuration file used to run model training.
+  - `run_training.py`: Scripts for training the LightOCT models.
+  - `test_model.py`: Script to evaluate models on test data.
+- **Utilities and Visualization**:
+  - `models_tf.py`: Contains the models architecture definition.
+  - `utilities.py` and `utilities_models_tf.py`: Utility functions for data handling, model evaluation, and performance metrics.
+  - `visualize_dataset.py`: Tools for dataset inspection.
+  - `aggregate_tabular_test_summary.py`: Script that aggregates all the tabular test summary for all the trained models.
+
 ## Usage
 ### UNIX-based operating systems
 The repository comes with two shell scripts that run automatically model configuration, training and testing for the retinal and the AIIMS datasets. By default, the training, validation, and testing datasets are created using a *per-volume/subject* splitting strategy, and models are trained through a 3-fold cross-validation scheme. To change the splitting strategy, open the **train_LightOCT_retinal.sh** or the **train_LightOCT_AIIMS.sh** files and change the dataset_split_strategy variable (line 60) to *per-image* or *original* (*original* only valid for the retinal dataset).
@@ -92,7 +108,7 @@ If you use this work, please cite:
 This work is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
 ## Acknowledgments
-[1][#ref1]Butola *et al.,* Deep learning architecture “LightOCT” for diagnostic decision support using optical coherence tomography images of biological samples. Biomedical Optics Express. 2020 Sep 1;11(9):5017-31.\
+[1]Butola *et al.,* Deep learning architecture “LightOCT” for diagnostic decision support using optical coherence tomography images of biological samples. Biomedical Optics Express. 2020 Sep 1;11(9):5017-31.\
 [2] Butola *et al.,* Volumetric analysis of breast cancer tissues using machine learning and swept-source optical coherence tomography. Applied optics. 2019 Feb 10;58(5):A135-41.\
 [3] Kermany *et al.,* Identifying medical diagnoses and treatable diseases by image-based deep learning. Cell. 2018 Feb 22;172(5):1122-31.\
 [4] Kermany *et al.,* Large dataset of labeled optical coherence tomography (oct) and chest x-ray images. Mendeley Data. 2018;3:10-7632.
