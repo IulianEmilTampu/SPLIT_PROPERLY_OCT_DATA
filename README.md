@@ -90,7 +90,7 @@ to run the same routine as before on the AIIMS dataset.
 For users using Windows-based systems, the **configure_training.py**, **run_training.py** and **test_model.py** scripts can be run independently from the command line. For an understanding of the required and default parameters, run *python3 script_name.py --help*.
 
 
-## Citation
+## Reference
 If you use this work, please cite:
 
 ```bibtex
